@@ -1,0 +1,12 @@
+<div
+  class="flex flex-wrap justify-center flex-shrink-1 container mx-auto transition-all duration-700 ease-linear resize-none"
+>
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4 xl:gap-6 px-3 pt-0 pb-3 mx-10 mt-2"
+  >
+    <app-product-card
+      *ngFor="let product of filteredProducts"
+      [product]="product"
+    ></app-product-card>
+  </div>
+</div>

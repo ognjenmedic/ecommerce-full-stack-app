@@ -1,0 +1,252 @@
+<div class="2xl:container 2xl:mx-auto">
+  <div class="lg:px-20 md:px-6 px-4 md:py-12 py-8">
+    <div class="flex items-center space-x-4 mb-2">
+      <h1 class="text-3xl lg:text-4xl font-semibold text-gray-800">
+        My Wish List
+      </h1>
+      <p class="text-base text-gray-600 mt-4 mb-1"></p>
+    </div>
+    <hr />
+    <div
+      *ngIf="wishlistService.wishlistItems.length <= 0"
+      class="flex items-center justify-center flex-col space-y-4 py-10"
+    >
+      <div
+        class="border-black text-gray-500 p-3 rounded-lg animate-fade-out w-full xl:w-1/4 my-4"
+      >
+        <p class="flex text-center justify-center">
+          <!-- <span class="material-icons mr-2">insert_emoticon</span> -->
+
+          {{ wishlistService.emptyWishlistMessage }}
+        </p>
+      </div>
+      <button
+        routerLink="/"
+        class="mx-2 my-2 bg-gray-900 hover:bg-gray-700 transition duration-150 ease-in-out rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs mb-4"
+      >
+        Shop Now!
+      </button>
+    </div>
+
+    <div
+      *ngFor="
+        let tempWishlistItem of wishlistService.wishlistItems;
+        let i = index
+      "
+      class="flex flex-col md:flex-row items-strech mt-10 mb-5 md:mt-14 lg:mt-16"
+    >
+      <div>
+        <img
+          src="{{ tempWishlistItem.imageUrl }}"
+          alt="{{ tempWishlistItem.productName }}"
+          role="img"
+          class="hidden md:block"
+          width="200"
+        />
+        <img
+          src="{{ tempWishlistItem.imageUrl }}"
+          alt="{{ tempWishlistItem.productName }}"
+          role="img"
+          class="w-full h-full md:hidden"
+        />
+      </div>
+      <div class="md:flex hidden w-full justify-between">
+        <div class="flex flex-col justify-center md:ml-6 lg:ml-8">
+          <h2 class="mt-1 text-xl font-semibold text-gray-800">
+            {{ tempWishlistItem.productName }}
+          </h2>
+          <p
+            class="mt-4 text-sm leading-tight text-gray-600 md:w-8/12 lg:w-10/12"
+          >
+            {{ tempWishlistItem.description }}
+          </p>
+          <div class="mt-8 flex space-x-6 items-center">
+            <a
+              (click)="removeWishlistItem(i)"
+              class="text-base text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-gray-600 hover:text-black cursor-pointer"
+              >Remove</a
+            >
+            <button
+              (click)="addToCart(tempWishlistItem, i)"
+              class="mx-4 my-2 bg-gray-900 hover:bg-gray-700 transition duration-150 ease-in-out rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="flex md:flex-col h-full lg:flex-row lg:space-x-72">
+            <div
+              class="p-3 w-20 h-10 border border-gray-300 flex items-center justify-center space-x-3"
+            >
+              <button
+                aria-label="decrease quantity"
+                class="focus:outline-none focus:ring-2 focus:ring-gray-600 hover:bg-gray-100"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 4L6 8L10 12"
+                    stroke="#1F2937"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <p class="quantity1 text-base text-gray-800">1</p>
+              <button
+                aria-label="increase quantity"
+                class="focus:outline-none focus:ring-2 focus:ring-gray-600 hover:bg-gray-100"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 4L10 8L6 12"
+                    stroke="#1F2937"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="hidden md:block">
+              <p
+                class="mt-24 lg:mt-0 text-xl font-medium text-gray-800 text-right"
+              >
+                {{ tempWishlistItem.unitPrice | currency : "USD" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col md:hidden mt-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="mt-1 text-xl font-semibold leading-tight text-gray-800">
+              {{ tempWishlistItem.productName }}
+            </h2>
+          </div>
+          <div
+            class="p-3 w-20 h-10 border border-gray-300 flex items-center justify-center space-x-3"
+          >
+            <button
+              aria-label="decrease quantity"
+              class="focus:outline-none focus:ring-2 focus:ring-gray-600 hover:bg-gray-100"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 4L6 8L10 12"
+                  stroke="#1F2937"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <p class="quantity1 text-base text-gray-800">1</p>
+            <button
+              aria-label="increase quantity"
+              class="focus:outline-none focus:ring-2 focus:ring-gray-600 hover:bg-gray-100"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 4L10 8L6 12"
+                  stroke="#1F2937"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <p class="mt-4 w-11/12text-sm leading-tight text-gray-600">
+          {{ tempWishlistItem.description }}
+        </p>
+        <div class="mt-8 flex space-x-6 items-center">
+          <a
+            class="text-base text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-gray-600 hover:text-black"
+            >Remove</a
+          >
+          <a
+            href="javascript:void(0)"
+            class="text-base text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-gray-600 hover:text-black"
+            >Move to wishlist</a
+          >
+        </div>
+        <p class="mt-10 text-xl font-medium text-gray-800">
+          {{ tempWishlistItem.unitPrice | currency : "USD" }}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div
+      class="flex justify-center flex-col-reverse md:flex-row md:justify-end mt-4 md:mt-36 lg:mt-40 md:space-x-6 w-full"
+    >
+      <a
+        *ngIf="!showEmptyWishlistMessage"
+        href="javascript:void(0)"
+        class="w-full md:w-3/12 lg:w-auto flex items-center space-x-2 mt-4 md:mt-10 justify-center focus:outline-none focus:ring-2 focus:ring-gray-600"
+      >
+        <div class="mt-0.5 md:mt-1">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 12H19"
+              stroke="#4B5563"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5 12L9 16"
+              stroke="#4B5563"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5 12L9 8"
+              stroke="#4B5563"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+
+        <p
+          routerLink="/"
+          class="text-base font-medium underline text-gray-600 hover:text-gray-900"
+        >
+          Continue shopping
+        </p>
+      </a>
+    </div>
+  </div>
+</div>

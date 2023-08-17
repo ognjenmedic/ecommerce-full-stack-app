@@ -1,0 +1,23 @@
+<div class="flex md:flex-row flex-col items-center py-2">
+  <!-- Code block starts -->
+  <div class="flex flex-col md:mr-1">
+    <div class="relative">
+      <div
+        class="absolute text-gray-600 dark:text-gray-400 flex items-center px-3 border-r dark:border-gray-700 h-full"
+      >
+        <span
+          class="uppercase text-sm leading-tight tracking-normal font-bold hover:shadow-lg"
+          >{{ totalQuantity }}
+        </span>
+      </div>
+      <div
+        id="price"
+        class="text-gray-600 dark:text-gray-400 focus:outline-none focus:border focus:border-indigo-700 dark:focus:border-indigo-700 dark:border-gray-700 dark:bg-gray-800 font-normal w-40 h-10 flex items-center pl-16 text-sm border-gray-300 rounded border font-bold ml-1 hover:shadow-lg"
+        placeholder="$0.00"
+      >
+        {{ totalPrice | currency : "USD" }}
+      </div>
+    </div>
+    <!-- Code block ends -->
+  </div>
+</div>

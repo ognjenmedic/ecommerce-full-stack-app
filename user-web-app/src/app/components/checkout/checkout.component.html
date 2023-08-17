@@ -1,0 +1,358 @@
+<div class="grid lg:grid-cols-2 md:grid-cols-1">
+  <div class="relative md:px-6 px-4 lg:bg-white md:bg-gray-50 bg-gray-50">
+    <div class="grid grid-cols-12">
+      <div
+        class="lg:col-start-2 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12"
+      >
+        <div class="flex mt-12 cursor-pointer">
+          <svg
+            width="15"
+            height="16"
+            viewBox="0 0 15 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.14844 12.5L3.51562 8M3.51562 8L7.14844 3.5M3.51562 8H12.0703"
+              stroke="#4B5563"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+          <p class="text-base leading-none text-gray-600 pl-1">Go back</p>
+        </div>
+        <p class="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-2">
+          Check out
+        </p>
+        <hr />
+        <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+          <!--customer form group-->
+          <div formGroupName="customer">
+            <p
+              class="text-xl font-medium leading-tight text-gray-800 mb-6 mt-3"
+            >
+              Customer Details
+            </p>
+
+            <label class="form-container w-full mb-1">First Name</label>
+            <input
+              formControlName="firstName"
+              type="text"
+              name="firstName"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="First Name"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='First Name'"
+            />
+
+            <label class="form-container w-full mb-1">Last Name</label>
+            <input
+              formControlName="lastName"
+              type="text"
+              name="lastName"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Last Name"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Last Name'"
+            />
+
+            <label class="form-container w-full mb-1">Email</label>
+            <input
+              formControlName="email"
+              type="email"
+              name="email"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Email"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Email'"
+            />
+          </div>
+          <!--end of customer form group-->
+
+          <!--shipping address form group-->
+          <div formGroupName="shippingAddress">
+            <p
+              class="text-xl font-medium leading-tight text-gray-800 mb-6 mt-3"
+            >
+              Shipping Address
+            </p>
+
+            <label class="form-container w-full mb-1">Country</label>
+            <select
+              formControlName="country"
+              type="text"
+              name="country"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Country"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Country'"
+            >
+              <option value="">TODO</option>
+            </select>
+
+            <label class="form-container w-full mb-1">Street</label>
+            <input
+              formControlName="street"
+              type="text"
+              name="street"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Street"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Street'"
+            />
+
+            <label class="form-container w-full mb-1">City</label>
+            <input
+              formControlName="city"
+              type="text"
+              name="city"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="City"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='City'"
+            />
+
+            <label class="form-container w-full mb-1">State</label>
+            <select
+              formControlName="state"
+              type="text"
+              name="state"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="State"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='State'"
+            >
+              <option value="">TODO</option>
+            </select>
+
+            <label class="form-container w-full mb-1">Zip Code</label>
+            <input
+              formControlName="zipCode"
+              type="text"
+              name="zipCode"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Zip Code"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Zip Code'"
+            />
+          </div>
+          <!--end of shipping address form group-->
+
+          <!--add checkbox to copy shipping to billing address-->
+
+          <div class="flex mt-2 mb-8">
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              class="accent-gray-800 cursor-pointer"
+              (change)="copyShippingAddressToBillingAddress($event)"
+            />
+            <p class="text-sm leading-none text-gray-600 pl-2">
+              Billing address same as shipping address.
+            </p>
+          </div>
+          <!--billing address form group-->
+          <div formGroupName="billingAddress">
+            <p
+              class="text-xl font-medium leading-tight text-gray-800 mb-6 mt-3"
+            >
+              Billing Address
+            </p>
+
+            <label class="form-container w-full mb-1">Country</label>
+            <select
+              formControlName="country"
+              type="text"
+              name="country"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Country"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Country'"
+            >
+              <option value="">TODO</option>
+            </select>
+
+            <label class="form-container w-full mb-1">Street</label>
+            <input
+              formControlName="street"
+              type="text"
+              name="street"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Street"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Street'"
+            />
+
+            <label class="form-container w-full mb-1">City</label>
+            <input
+              formControlName="city"
+              type="text"
+              name="city"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="City"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='City'"
+            />
+
+            <label class="form-container w-full mb-1">State</label>
+            <select
+              formControlName="state"
+              type="text"
+              name="state"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="State"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='State'"
+            >
+              <option value="">TODO</option>
+            </select>
+
+            <label class="form-container w-full mb-1">Zip Code</label>
+            <input
+              formControlName="zipCode"
+              type="text"
+              name="zipCode"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Zip Code"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Zip Code'"
+            />
+          </div>
+          <!--end of billing address form group-->
+
+          <!--credit card form group-->
+          <div formGroupName="creditCard">
+            <p
+              class="text-xl font-medium leading-tight text-gray-800 mb-6 mt-3"
+            >
+              Credit Card Details
+            </p>
+
+            <label class="form-container w-full mb-1">Card Type</label>
+            <select
+              formControlName="cardType"
+              type="text"
+              name="cardType"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Card Type"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Card Type'"
+            >
+              <option value="">Visa</option>
+              <option value="">Mastercard</option>
+            </select>
+
+            <label class="form-container w-full mb-1">Name on Card</label>
+            <input
+              formControlName="nameOnCard"
+              type="text"
+              name="nameOnCard"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Name on Card"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Name on Card'"
+            />
+
+            <label class="form-container w-full mb-1">Card Number</label>
+            <input
+              formControlName="cardNumber"
+              type="text"
+              name="cardNumber"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Card Number"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Card Number'"
+            />
+
+            <label class="form-container w-full mb-1">Security Code</label>
+            <input
+              formControlName="securityCode"
+              type="text"
+              name="securityCode"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Security Code"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Security Code'"
+            />
+
+            <label class="form-container w-full mb-1">Expiration Month</label>
+            <select
+              formControlName="expirationMonth"
+              type="text"
+              name="expirationMonth"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Expiration Month"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Expiration Month'"
+            >
+              <option *ngFor="let month of creditCardMonths" [value]="month">
+                {{ month }}
+              </option>
+            </select>
+
+            <label class="form-container w-full mb-1">Expiration Year</label>
+            <select
+              formControlName="expirationYear"
+              (change)="handleMonthsAndYears()"
+              type="text"
+              name="expirationYear"
+              id=""
+              class="p-3 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0 mb-3 placeholder-opacity-50"
+              placeholder="Expiration Year"
+              onfocus="this.placeholder=''"
+              onblur="this.placeholder='Expiration Year'"
+            >
+              <option *ngFor="let year of creditCardYears" [value]="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+          <!--end of credit card form group-->
+
+          <!--order details review-->
+          <p class="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-3">
+            Review Your Order
+          </p>
+          <p class="form-container w-full mb-1">
+            Total Quantity: {{ totalQuantity }}
+          </p>
+          <p class="form-container w-full mb-1">Shipping: FREE</p>
+          <p class="form-container w-full mb-1">
+            Total Price: {{ totalPrice | currency : "USD" }}
+          </p>
+
+          <!--end of order details review-->
+
+          <!--submit button-->
+          <button
+            (click)="placeOrder()"
+            class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out"
+          >
+            Proceed to payment
+          </button>
+          <!--submit button-->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

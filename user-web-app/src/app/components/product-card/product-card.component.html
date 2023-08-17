@@ -1,0 +1,83 @@
+<div class="flex justify-center">
+  <div class="block rounded-lg shadow-lg bg-white max-w-sm text-center">
+    <div class="border-b border-gray-300">
+      <a [routerLink]="['/products', product.sku]">
+        <img src="{{ product.imageUrl }} " alt="product.productName" />
+      </a>
+    </div>
+    <div class="p-6 h-32">
+      <a routerLink="/products/{{ product.sku }}">
+        <h5 class="text-gray-900 text-xl font-medium mb-2 text-left">
+          {{ product.productName }}
+        </h5>
+      </a>
+      <p class="text-gray-700 text-base mb-4 text-left">
+        {{ product.unitPrice | currency : "USD" }}
+      </p>
+    </div>
+    <div class="flex justify-evenly py-1 px-2 border-t border-gray-300">
+      <ng-container
+        *ngIf="
+          !showAddedMessage && !showExistingMessage && !showLoginFirstMessage;
+          else messageTemplate
+        "
+      >
+        <button
+          class="mx-2 my-2 bg-gray-900 hover:bg-gray-700 transition duration-150 ease-in-out rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs"
+        >
+          Buy Now
+        </button>
+
+        <button
+          (click)="addToCart(product)"
+          class="mx-2 my-2 bg-gray-900 hover:bg-gray-700 transition duration-150 ease-in-out rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs"
+        >
+          Add to Cart
+        </button>
+
+        <button
+          (click)="
+            userService.isAuthenticated
+              ? addItemToWishlist(product)
+              : showLoginFirst()
+          "
+          class="mx-2 my-2 bg-gray-900 hover:bg-gray-700 rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs"
+        >
+          Wishlist
+        </button>
+      </ng-container>
+      <ng-template #messageTemplate>
+        <div
+          *ngIf="showAddedMessage"
+          class="border-black text-green-500 rounded-lg animate-fade-out display: block"
+          style="padding: 13px"
+        >
+          <p class="flex items-center justify-center">
+            <span class="material-icons mr-2">check_circle</span>
+            {{ wishlistService.addedToWishListMessage }}
+          </p>
+        </div>
+        <div
+          *ngIf="showExistingMessage"
+          class="border-black text-red-500 rounded-lg animate-fade-out"
+          style="padding: 13px"
+        >
+          <p class="flex items-center justify-center">
+            <span class="material-icons mr-2">warning</span>
+            {{ wishlistService.existingWishListMessage }}
+          </p>
+        </div>
+        <div
+          *ngIf="showLoginFirstMessage"
+          class="border-black text-red-500 rounded-lg animate-fade-out"
+          style="padding: 13px"
+        >
+          <p class="flex items-center justify-center">
+            <span class="material-icons mr-2">warning</span>
+            {{ wishlistService.loginFirstMessage }}
+          </p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
