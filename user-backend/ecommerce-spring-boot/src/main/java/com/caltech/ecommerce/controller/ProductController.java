@@ -4,10 +4,7 @@ import com.caltech.ecommerce.bean.Product;
 import com.caltech.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +18,10 @@ public class ProductController {
     @GetMapping(value = "findAllProducts", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Product> findAllProducts(){
         return productService.findAllProducts();
+    }
+
+    @GetMapping(value = "/category/{cid}")
+    public List<Product> getProductsByCategoryId(@PathVariable Long cid) {
+        return productService.getProductsByCategoryId(cid);
     }
 }
