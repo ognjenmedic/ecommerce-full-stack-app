@@ -12,4 +12,6 @@ public interface ProductRepository extends JpaRepository <Product, Long> {
 
     Product findProductBySku(int sku);
 
+    List<Product> searchAllBySearchTerm(String searchTerm);
+
 }

@@ -33,9 +33,7 @@ export class ProductsService {
   //   return this.http.get<Product[]>(`${this.baseUrl}/category/${cid}`);
   // }
 
-  searchProducts(query: string) {
-    return this.http.get<Product[]>(
-      `http://localhost:3000/PRODUCTS?q=${query}`
-    );
+  searchProducts(searchTerm: string) {
+    return this.http.get<Product[]>(`${this.baseUrl}/products?q=${searchTerm}`);
   }
 }

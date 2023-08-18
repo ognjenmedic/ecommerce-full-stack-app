@@ -23,4 +23,8 @@ public class ProductService {
         return productRepository.findProductBySku(sku);
     }
 
+    public List<Product> searchProductsBySearchTerm(String searchTerm) {
+        return productRepository.searchAllBySearchTerm(searchTerm);
+    }
+
 }
