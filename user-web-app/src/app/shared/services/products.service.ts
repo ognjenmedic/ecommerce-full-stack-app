@@ -20,8 +20,8 @@ export class ProductsService {
   }
 
   getProduct(productIdFromRoute: number): Observable<Product> {
-    const productUrl = `/PRODUCTS?sku=${productIdFromRoute} `;
-    return this.http.get<Product>(productUrl).pipe(map((res: any) => res[0]));
+    const productUrl = `${this.baseUrl}/products/${productIdFromRoute} `;
+    return this.http.get<Product>(productUrl);
   }
 
   getProductByCategoryId(categoryIdFromRoute: number): Observable<Product[]> {

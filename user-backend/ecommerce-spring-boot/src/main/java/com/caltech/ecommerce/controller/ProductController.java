@@ -25,7 +25,7 @@ public class ProductController {
         return productService.getProductsByCategoryId(cid);
     }
 
-    @GetMapping (value = "products/{sku}")
+    @GetMapping(value = "{sku}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Product getProductById(@PathVariable int sku){
         return productService.getProductById(sku);
     }
