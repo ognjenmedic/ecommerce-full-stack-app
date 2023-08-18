@@ -38,12 +38,21 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     // First get the product id from the current route.
     const routeParams = this.route.snapshot.paramMap;
-    const productIdFromRoute = Number(routeParams.get('productSku'));
+    const initialProductIdFromRoute = Number(routeParams.get('productSku'));
+    this.fetchProduct(initialProductIdFromRoute);
 
-    // Find the product that corresponds with the id provided in route.
+    // Subscribe for subsequent changes in the route parameters
+    this.route.params.subscribe((params) => {
+      const productIdFromRoute = Number(params['productSku']);
+      this.fetchProduct(productIdFromRoute);
+    });
+  }
 
+  // Find the product that corresponds with the id provided in route.
+
+  fetchProduct(productId: number): void {
     this.productsService
-      .getProduct(productIdFromRoute)
+      .getProduct(productId)
       .subscribe((data) => (this.product = data));
   }
 

@@ -46,9 +46,11 @@ export class NavbarComponent implements OnInit {
   }
 
   hideSearch() {
-    this.searchResult = [];
-    this.productService.products.next([]);
-    this.searchInput.reset();
+    setTimeout(() => {
+      console.log('blur event fired');
+      this.products = [];
+      this.searchInput.reset();
+    }, 150);
   }
 
   redirectToDetails(sku: number) {

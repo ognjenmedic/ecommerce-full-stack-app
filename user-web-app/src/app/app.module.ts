@@ -25,6 +25,7 @@ import { UserService } from './shared/services/user.service';
 import { RegisterComponent } from './auth/register/register.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
