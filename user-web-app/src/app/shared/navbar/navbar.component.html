@@ -250,12 +250,7 @@
             class="bg-white absolute left-0 w-full m-0 z-50"
             style="top: 52px"
           >
-            <li
-              *ngFor="
-                let item of productService.products | async;
-                let i = index
-              "
-            >
+            <li *ngFor="let item of products; let i = index">
               <div
                 *ngIf="i < 5"
                 class="flex items-center py-2 pl-2 border-b-2 w-full z-10 mt-2"

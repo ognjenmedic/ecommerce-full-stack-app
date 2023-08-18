@@ -34,6 +34,8 @@ export class ProductsService {
   // }
 
   searchProducts(searchTerm: string) {
-    return this.http.get<Product[]>(`${this.baseUrl}/products?q=${searchTerm}`);
+    return this.http.get<Product[]>(
+      `${this.baseUrl}/products/search?query=${searchTerm}`
+    );
   }
 }

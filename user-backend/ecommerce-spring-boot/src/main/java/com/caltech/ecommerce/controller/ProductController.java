@@ -30,8 +30,8 @@ public class ProductController {
         return productService.getProductById(sku);
     }
 
-    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Product> searchProductsBySearchTerm(@RequestParam("searchTerm") String searchTerm){
-        return productService.searchProductsBySearchTerm(searchTerm);
+    @GetMapping("/search")
+    public List<Product> searchProductsBySearchTerm(@RequestParam("query") String query){
+        return productService.searchProductsBySearchTerm(query);
     }
 }

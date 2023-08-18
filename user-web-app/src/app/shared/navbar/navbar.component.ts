@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   constructor(public productService: ProductsService, private router: Router) {
     this.ProductCategoryEnum = ProductCategory;
     this.searchResult = [];
+    this.products = []; //new
   }
 
   ngOnInit(): void {
@@ -33,14 +34,14 @@ export class NavbarComponent implements OnInit {
   }
 
   searchProducts() {
-    const searchTerm = this.searchInput.value;
-    console.log(searchTerm);
-    if (searchTerm.length > 1) {
-      this.productService.searchProducts(searchTerm).subscribe((result) => {
-        this.productService.products.next(result);
-      });
+    if (this.searchInput.value) {
+      this.productService
+        .searchProducts(this.searchInput.value)
+        .subscribe((products) => {
+          this.products = products;
+        });
     } else {
-      this.productService.products.next([]);
+      this.products = [];
     }
   }
 
