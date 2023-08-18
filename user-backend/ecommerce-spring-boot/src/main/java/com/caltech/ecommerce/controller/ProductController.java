@@ -24,4 +24,9 @@ public class ProductController {
     public List<Product> getProductsByCategoryId(@RequestParam("categoryId") Long cid) {
         return productService.getProductsByCategoryId(cid);
     }
+
+    @GetMapping (value = "products/{pid}")
+    public Product getProductById(@PathVariable Long pid){
+        return productService.getProductById(pid);
+    }
 }
