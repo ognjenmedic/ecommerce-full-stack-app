@@ -20,8 +20,8 @@ public class ProductController {
         return productService.findAllProducts();
     }
 
-    @GetMapping(value = "/category/{cid}")
-    public List<Product> getProductsByCategoryId(@PathVariable Long cid) {
+    @GetMapping
+    public List<Product> getProductsByCategoryId(@RequestParam("categoryId") Long cid) {
         return productService.getProductsByCategoryId(cid);
     }
 }

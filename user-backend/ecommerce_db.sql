@@ -23,9 +23,13 @@ foreign key (category_id) references category(cid)
 );
 
 alter table product modify description text;
+DROP TABLE IF EXISTS product;
+
 
 -- insert into category
 INSERT INTO category (cid, category_name) VALUES (1, 'WOMEN');
+INSERT INTO category (cid, category_name) VALUES (2, 'MEN');
+INSERT INTO category (cid, category_name) VALUES (3, 'KIDS');
 
 
 -- insert products

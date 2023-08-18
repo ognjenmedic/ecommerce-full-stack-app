@@ -24,10 +24,14 @@ export class ProductsService {
     return this.http.get<Product>(productUrl).pipe(map((res: any) => res[0]));
   }
 
-  getProductByCategoryId(categoryIdFromRoute: number): Observable<Product> {
-    const categoryUrl = `/PRODUCTS?categoryId=${categoryIdFromRoute} `;
-    return this.http.get<Product>(categoryUrl);
+  getProductByCategoryId(categoryIdFromRoute: number): Observable<Product[]> {
+    const categoryUrl = `${this.baseUrl}/products?categoryId=${categoryIdFromRoute} `;
+    return this.http.get<Product[]>(categoryUrl);
   }
+
+  // getProductByCategoryId(cid: number): Observable<Product[]> {
+  //   return this.http.get<Product[]>(`${this.baseUrl}/category/${cid}`);
+  // }
 
   searchProducts(query: string) {
     return this.http.get<Product[]>(

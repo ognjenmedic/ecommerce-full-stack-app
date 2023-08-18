@@ -27,13 +27,17 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     firstValueFrom(this.productService.getProducts()).then(
       (value: Product[]) => {
-        this.filteredProducts = value;
         this.allProducts = value;
+
+        this.filterByCategory();
       }
     );
+  }
 
+  filterByCategory() {
     this.route.queryParams.subscribe((params: any) => {
       const categoryId = params.categoryId;
+      console.log('Selected Category ID:', categoryId);
       console.log(params);
       if (categoryId != this.ProductCategoryEnum.ALL) {
         this.productService
