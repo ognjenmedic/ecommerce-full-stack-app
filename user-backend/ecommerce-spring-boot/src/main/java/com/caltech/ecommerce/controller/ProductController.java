@@ -25,8 +25,8 @@ public class ProductController {
         return productService.getProductsByCategoryId(cid);
     }
 
-    @GetMapping (value = "products/{pid}")
-    public Product getProductById(@PathVariable Long pid){
-        return productService.getProductById(pid);
+    @GetMapping (value = "products/{sku}")
+    public Product getProductById(@PathVariable int sku){
+        return productService.getProductById(sku);
     }
 }
