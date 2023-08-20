@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
       (res) => {
         alert('Registration Successful');
         this.registrationForm.reset;
-        this.router.navigate(['/categories']);
+        this.router.navigate(['/']);
       },
       (error) => {
         alert('Something went wrong');
