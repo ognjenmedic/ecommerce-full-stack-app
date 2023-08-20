@@ -9,16 +9,14 @@ import { User } from '../../models/user';
 })
 export class UserService {
   public userState: BehaviorSubject<User>;
-
+  private baseUrl;
   constructor(private http: HttpClient, private router: Router) {
     this.userState = new BehaviorSubject(null);
+    this.baseUrl = 'http://localhost:8080';
   }
 
   public register(userData: any) {
-    return this.http.post<any>(
-      'http://localhost:3000/signedUpUsersList',
-      userData
-    );
+    return this.http.post<any>(`${this.baseUrl}/users/register`, userData);
   }
 
   public login() {
