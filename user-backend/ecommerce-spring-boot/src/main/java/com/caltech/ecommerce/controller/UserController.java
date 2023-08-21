@@ -20,4 +20,14 @@ public class UserController {
         return new ResponseEntity<>(registeredUser,HttpStatus.CREATED);
 
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestBody User user){
+        User existingUser = userService.findUserByEmail(user.getEmail());
+        if(existingUser != null && existingUser.getPassword().equals(user.getPassword())){
+            return new ResponseEntity<>(existingUser, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

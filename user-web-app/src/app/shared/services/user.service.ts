@@ -19,8 +19,9 @@ export class UserService {
     return this.http.post<any>(`${this.baseUrl}/users/register`, userData);
   }
 
-  public login() {
-    return this.http.get<any>('http://localhost:3000/signedUpUsersList');
+  public login(email: string, password: string) {
+    const credentials = { email: email, password: password };
+    return this.http.post<User>(`${this.baseUrl}/users/login`, credentials);
   }
 
   public logout() {
