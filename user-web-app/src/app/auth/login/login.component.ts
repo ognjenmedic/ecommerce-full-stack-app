@@ -43,20 +43,16 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.userService.login().subscribe(
-      (res) => {
-        const user = res.find((a: any) => {
-          return (
-            a.email === this.loginForm.value.email &&
-            a.password === this.loginForm.value.password
-          );
-        });
+    const email = this.loginForm.value.email;
+    const password = this.loginForm.value.password;
+    this.userService.login(email, password).subscribe(
+      (user) => {
         if (user) {
           this.loginForm.reset();
           const now = new Date();
 
           (user.expiry = now.getTime() + 900000),
-            window.localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify(user));
           console.log(user);
           this.userService.userState.next(user);
           this.router.navigate(['']);
