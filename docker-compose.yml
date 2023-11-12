@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  mysql-container:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: ecommerce_db
+      MYSQL_USER: ecommerce_user
+      MYSQL_PASSWORD: ${ECOMMERCE_DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+    ports:
+      - 3307:3306
+    volumes:
+      - db:/var/lib/mysql
+
+  springboot-container:
+    build:
+      context: ./user-backend/ecommerce-spring-boot
+      dockerfile: Dockerfile
+    container_name: springboot-container
+    depends_on:
+      - mysql-container
+    ports:
+      - 8080:8080
+    restart: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/ecommerce_db
+      - SPRING_DATASOURCE_USERNAME=ecommerce_user
+      - SPRING_DATASOURCE_PASSWORD=${ECOMMERCE_DB_PASS}
+
+  angular-container:
+    build:
+      context: ./user-frontend/user-web-app
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+
+volumes:
+  db:
