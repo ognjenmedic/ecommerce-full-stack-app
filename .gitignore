@@ -50,6 +50,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+user-backend/ecommerce-spring-boot/src/main/resources/application-dev.properties
 
 ### STS ###
 .apt_generated
