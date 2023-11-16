@@ -6,12 +6,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class OrdersService {
+  private baseUrl: string;
   orders: Order[];
   constructor(private http: HttpClient) {
     this.orders = [];
+    this.baseUrl = 'http://localhost:8080';
   }
 
   placeOrder(orderData) {
-    return this.http.post<any>('http://localhost:3000/orders', orderData);
+    return this.http.post<any>(`${this.baseUrl}/orders`, orderData);
   }
 }

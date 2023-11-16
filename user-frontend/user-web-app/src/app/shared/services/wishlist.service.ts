@@ -9,6 +9,7 @@ import { WishlistResponse } from 'src/app/models/wishlist-response';
   providedIn: 'root',
 })
 export class WishlistService {
+  private baseUrl: string;
   wishlistItems: Wishlist[];
   userId: number;
   addedToWishListMessage: string;
@@ -28,6 +29,7 @@ export class WishlistService {
     this.emptyWishlistMessage =
       'Your Wish List is empty... Check out our latest products now!';
     this.loginFirstMessage = 'Please Log In';
+    this.baseUrl = 'http://localhost:8080';
   }
 
   checkUserState() {
@@ -41,18 +43,15 @@ export class WishlistService {
   }
 
   postWishlistItem(wishlist) {
-    return this.http.patch(
-      `http://localhost:3000/signedUpUsersList/${this.userId}`,
-      {
-        wishlist: wishlist,
-      }
-    );
+    return this.http.patch(`${this.baseUrl}/signedUpUsersList/${this.userId}`, {
+      wishlist: wishlist,
+    });
   }
 
   getWishlistItems() {
     if (this.userId) {
       return this.http
-        .get(`http://localhost:3000/signedUpUsersList/${this.userId}`)
+        .get(`${this.baseUrl}/signedUpUsersList/${this.userId}`)
         .pipe(
           map((data: any) => {
             return data.wishlist;
