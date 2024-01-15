@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pid")
-    private Long pid;
+    @Column(name = "product_id")
+    private Long productId;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -33,88 +33,30 @@ public class Product {
     @Column(name = "units_in_stock")
     private int unitsInStock;
 
-    public Long getPid() {
-        return pid;
-    }
-
-    public void setPid(Long pid) {
-        this.pid = pid;
-    }
-
-    public int getSku() {
-        return sku;
-    }
-
-    public void setSku(int sku) {
-        this.sku = sku;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public int getUnitsInStock() {
-        return unitsInStock;
-    }
-
-    public void setUnitsInStock(int unitsInStock) {
-        this.unitsInStock = unitsInStock;
-    }
-
-    public Product(Long pid, int sku, String productName, String imageUrl, String description, BigDecimal unitPrice, int categoryId, String category, int unitsInStock) {
-        this.pid = pid;
-        this.sku = sku;
-        this.productName = productName;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.unitPrice = unitPrice;
-//        this.categoryId = categoryId;
-//        this.category = category;
-        this.unitsInStock = unitsInStock;
-    }
-
     public Product() {
+    }
+
+    public Product(Long productId, int sku, String productName, String imageUrl, String description, BigDecimal unitPrice, Category category, int unitsInStock) {
+        this.productId = productId;
+        this.sku = sku;
+        this.productName = productName;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.unitPrice = unitPrice;
+        this.category = category;
+        this.unitsInStock = unitsInStock;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "pid=" + pid +
+                "productId=" + productId +
                 ", sku=" + sku +
                 ", productName='" + productName + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", description='" + description + '\'' +
                 ", unitPrice=" + unitPrice +
-//                ", categoryId=" + categoryId +
-                ", category='" + category + '\'' +
+                ", category=" + category +
                 ", unitsInStock=" + unitsInStock +
                 '}';
     }

@@ -3,6 +3,7 @@ import { Product } from './product';
 export class CartItem {
   quantity: number;
   product: Product = {
+    productId: 0,
     sku: 0,
     productName: '',
     imageUrl: '',
