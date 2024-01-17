@@ -1,9 +1,9 @@
-package com.caltech.ecommerce.bean;
+package com.caltech.ecommerce.entity;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

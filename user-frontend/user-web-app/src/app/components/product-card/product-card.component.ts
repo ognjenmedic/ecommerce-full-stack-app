@@ -49,7 +49,7 @@ export class ProductCardComponent implements OnInit {
       wishlist.push(product);
 
       let existingWishlistItem = this.wishlistService.wishlistItems.find(
-        (item) => item.sku === addedWishlistItem.sku
+        (item) => item.productId === addedWishlistItem.productId
       );
       if (existingWishlistItem) {
         this.showExistingMessage = true;

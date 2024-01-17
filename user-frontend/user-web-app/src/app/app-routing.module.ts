@@ -16,8 +16,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'payment', component: PaymentComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'products/:productSku', component: ProductDetailsComponent },
-  { path: 'products/:categoryId', component: ProductsComponent }, // added new 19 feb
+  { path: 'products/:productId', component: ProductDetailsComponent },
   { path: 'cart-details', component: CartDetailsComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: '', component: CategoriesComponent },

@@ -1,6 +1,6 @@
 package com.caltech.ecommerce.service;
 
-import com.caltech.ecommerce.bean.User;
+import com.caltech.ecommerce.entity.User;
 import com.caltech.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

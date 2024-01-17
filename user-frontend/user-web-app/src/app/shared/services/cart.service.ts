@@ -24,7 +24,8 @@ export class CartService {
 
     if (this.cartItems.length > 0) {
       existingCartItem = this.cartItems.find(
-        (tempCartItem) => tempCartItem.product.sku === addedCartItem.product.sku
+        (tempCartItem) =>
+          tempCartItem.product.productId === addedCartItem.product.productId
       );
       // check if we found it
       alreadyExistsInCart = existingCartItem != undefined;

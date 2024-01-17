@@ -1,9 +1,9 @@
-package com.caltech.ecommerce.bean;
+package com.caltech.ecommerce.entity;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "wishlists")
+@Table(name = "wishlist")
 public class Wishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

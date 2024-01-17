@@ -38,12 +38,12 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     // First get the product id from the current route.
     const routeParams = this.route.snapshot.paramMap;
-    const initialProductIdFromRoute = Number(routeParams.get('productSku'));
+    const initialProductIdFromRoute = Number(routeParams.get('productId'));
     this.fetchProduct(initialProductIdFromRoute);
 
     // Subscribe for subsequent changes in the route parameters
     this.route.params.subscribe((params) => {
-      const productIdFromRoute = Number(params['productSku']);
+      const productIdFromRoute = Number(params['productId']);
       this.fetchProduct(productIdFromRoute);
     });
   }
@@ -70,7 +70,7 @@ export class ProductDetailsComponent implements OnInit {
     wishlist.push(product);
 
     let existingWishlistItem = this.wishlistService.wishlistItems.find(
-      (item) => item.sku === addedWishlistItem.sku
+      (item) => item.productId === addedWishlistItem.productId
     );
     if (existingWishlistItem) {
       alert('Product already in Wish List!');

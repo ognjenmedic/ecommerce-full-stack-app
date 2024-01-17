@@ -1,18 +1,12 @@
+import { Category } from './category';
+
 export interface Product {
   productId: number;
-  sku: number;
+  sku: string;
   productName: string;
   imageUrl: string;
   description: string;
   unitPrice: number;
-  categoryId: ProductCategory;
-  category: string;
+  category: Category;
   unitsInStock: number;
-}
-
-export enum ProductCategory {
-  ALL,
-  WOMEN = 1,
-  MEN = 2,
-  KIDS = 3,
 }

@@ -1,13 +1,15 @@
 import { Product } from './product';
 
 export class Wishlist {
-  sku: number;
+  productId: number;
+  sku: string;
   productName: string;
   imageUrl: string;
   description: string;
   unitPrice: number;
 
   constructor(product: Product) {
+    this.productId = product.productId;
     this.sku = product.sku;
     this.productName = product.productName;
     this.imageUrl = product.imageUrl;

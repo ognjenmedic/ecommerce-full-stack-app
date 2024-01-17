@@ -1,4 +1,6 @@
-package com.caltech.ecommerce.bean;
+package com.caltech.ecommerce.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -14,16 +16,15 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("category")
     private Set<Product> products;
+
+
 
     public Category() {
     }
 
-    //    public Category(Long categoryId, String categoryName) {
-//        this.categoryId = categoryId;
-//        this.categoryName = categoryName;
-//    }
     public Long getCategoryId() {
         return categoryId;
     }

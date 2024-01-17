@@ -1,6 +1,6 @@
 package com.caltech.ecommerce.controller;
 
-import com.caltech.ecommerce.bean.User;
+import com.caltech.ecommerce.entity.User;
 import com.caltech.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

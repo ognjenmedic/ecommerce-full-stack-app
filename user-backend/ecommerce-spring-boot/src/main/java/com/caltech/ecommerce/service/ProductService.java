@@ -1,30 +1,57 @@
 package com.caltech.ecommerce.service;
 
-import com.caltech.ecommerce.bean.Category;
-import com.caltech.ecommerce.bean.Product;
+import com.caltech.ecommerce.entity.Product;
+import com.caltech.ecommerce.dto.ProductDTO;
 import com.caltech.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
-    public List<Product> findAllProducts(){
-        return productRepository.findAll();
+    public List<ProductDTO> findAllProducts() {
+        return productRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Product> getProductsByCategoryId(Long cid) { return productRepository.findProductsByCategoryCid(cid);}
+    public List<ProductDTO> getProductsByCategoryId(Long categoryId) {
+        return productRepository.findProductsByCategoryId(categoryId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-    public Product getProductById(int sku) {
+
+    // Updated to use productId
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId).orElse(null);
+    }
+
+    // Assuming sku is still relevant and used
+    public Product getProductBySku(int sku) {
         return productRepository.findProductBySku(sku);
     }
 
     public List<Product> searchProductsBySearchTerm(String query) {
         return productRepository.searchBySearchTerm(query);
+    }
+
+    private ProductDTO convertToDTO(Product product) {
+        return new ProductDTO(
+                product.getProductId(),
+                product.getSku(),
+                product.getProductName(),
+                product.getImageUrl(),
+                product.getDescription(),
+                product.getUnitPrice(),
+                product.getUnitsInStock(),
+                product.getCategory() != null ? product.getCategory().getCategoryId() : null
+        );
     }
 
 }
