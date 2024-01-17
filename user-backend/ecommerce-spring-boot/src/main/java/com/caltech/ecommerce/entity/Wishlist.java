@@ -5,24 +5,37 @@ import javax.persistence.*;
 @Entity
 @Table(name = "wishlist")
 public class Wishlist {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long wishlistId;
+
+    @EmbeddedId
+    private WishlistId id;
 
     @ManyToOne
+    @MapsId("productId")
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Long getWishlistId() {
-        return wishlistId;
+    // Constructors, Getters, Setters
+
+    public Wishlist() {
     }
 
-    public void setWishlistId(Long wishlistId) {
-        this.wishlistId = wishlistId;
+    public Wishlist(WishlistId id, Product product, User user) {
+        this.id = id;
+        this.product = product;
+        this.user = user;
+    }
+
+    public WishlistId getId() {
+        return id;
+    }
+
+    public void setId(WishlistId id) {
+        this.id = id;
     }
 
     public Product getProduct() {
@@ -41,22 +54,15 @@ public class Wishlist {
         this.user = user;
     }
 
-    public Wishlist() {
-    }
-
-    public Wishlist(Long wishlistId, Product product, User user) {
-        this.wishlistId = wishlistId;
-        this.product = product;
-        this.user = user;
-    }
-
+    // toString()
 
     @Override
     public String toString() {
         return "Wishlist{" +
-                "wishlistId=" + wishlistId +
-                ", product=" + product +
-                ", user=" + user +
+                "id=" + id +  // id is the composite key of type WishlistId
+                ", product=" + (product != null ? product.getProductId() : "null") +
+                ", user=" + (user != null ? user.getUserId() : "null") +
                 '}';
     }
+
 }

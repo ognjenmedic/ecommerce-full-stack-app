@@ -1,6 +1,7 @@
 package com.caltech.ecommerce.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -18,6 +19,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Wishlist> wishlists;
+
+    public User() {
+    }
+
     public User(Long userId, String name, String email, String password) {
         this.userId = userId;
         this.name = name;
@@ -25,14 +32,12 @@ public class User {
         this.password = password;
     }
 
-    public User() {
-    }
-
-    public Long getId() {
+    // Getters and Setters
+    public Long getUserId() {
         return userId;
     }
 
-    public void setId(Long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -60,12 +65,21 @@ public class User {
         this.password = password;
     }
 
+    public Set<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void setWishlists(Set<Wishlist> wishlists) {
+        this.wishlists = wishlists;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + userId +
+                "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
+
 }
