@@ -8,16 +8,25 @@ import { UserService } from './user.service';
   providedIn: 'root',
 })
 export class WishlistService {
-  private baseUrl: string = 'http://localhost:8080/wishlist';
+  private baseUrl: string;
 
-  addedToWishListMessage = 'Product added to Wish List!';
-  existingWishListMessage = 'Product already in Wish List!';
-  removedMessage = 'Product removed from Wish List!';
-  emptyWishlistMessage =
-    'Your Wish List is empty... Check out our latest products now!';
-  loginFirstMessage = 'Please Log In';
+  addedToWishListMessage: string;
+  existingWishListMessage: string;
+  movedToWishListMessage: string;
+  removedMessage: string;
+  emptyWishlistMessage: string;
+  loginFirstMessage: string;
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) {
+    this.addedToWishListMessage = 'Product added to Wish List!';
+    this.existingWishListMessage = 'Product already in Wish List!';
+    this.movedToWishListMessage = 'Product moved to Wish List!';
+    this.removedMessage = 'Product removed from Cart!';
+    this.emptyWishlistMessage =
+      'Your Wish List is empty... Check out our latest products now!';
+    this.loginFirstMessage = 'Please Log In';
+    this.baseUrl = 'http://localhost:8080/wishlist';
+  }
 
   getWishlistItems(userId: number): Observable<Wishlist[]> {
     if (!userId) return EMPTY;

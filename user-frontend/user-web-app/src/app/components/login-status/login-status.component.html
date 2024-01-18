@@ -1,7 +1,7 @@
 <div class="login-status-navbar">
   <span
     class="text-base text-right"
-    *ngIf="userService.userState | async as user"
+    *ngIf="userService.currentUser | async as user"
   >
     Welcome back {{ user.name }}!
   </span>

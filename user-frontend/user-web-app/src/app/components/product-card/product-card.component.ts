@@ -40,40 +40,39 @@ export class ProductCardComponent implements OnInit {
   }
 
   addItemToWishlist(product: Product) {
-    // if (this.userService.isAuthenticated) {
-    let wishlist;
-    this.wishlistService.getWishlistItems().subscribe((res) => {
-      wishlist = res;
-      console.log(wishlist);
-      let addedWishlistItem = new Wishlist(product); // new item to be added
-      wishlist.push(product);
-
-      let existingWishlistItem = this.wishlistService.wishlistItems.find(
-        (item) => item.productId === addedWishlistItem.productId
-      );
-      if (existingWishlistItem) {
-        this.showExistingMessage = true;
-        setTimeout(() => {
-          this.showExistingMessage = false;
-        }, 2000);
-      } else {
-        this.wishlistService.wishlistItems.push(addedWishlistItem);
-
-        this.wishlistService.postWishlistItem(wishlist).subscribe((res) => {
-          this.showAddedMessage = true;
-          setTimeout(() => {
-            this.showAddedMessage = false;
-          }, 2000);
-        });
-      }
-    }); // existing wishlist
+    if (this.userService.isAuthenticated) {
+      this.userService.currentUser.subscribe((user) => {
+        if (user && user.userId) {
+          this.wishlistService
+            .getWishlistItems(user.userId)
+            .subscribe((wishlist) => {
+              let existingWishlistItem = wishlist.find(
+                (item) => item.productId === product.productId
+              );
+              if (existingWishlistItem) {
+                this.showExistingMessage = true;
+                setTimeout(() => {
+                  this.showExistingMessage = false;
+                }, 2000);
+              } else {
+                const userId = user.userId;
+                const productId = product.productId;
+                this.wishlistService
+                  .addToWishlist(userId, productId)
+                  .subscribe((res) => {
+                    this.showAddedMessage = true;
+                    setTimeout(() => {
+                      this.showAddedMessage = false;
+                    }, 2000);
+                  });
+              }
+            });
+        }
+      });
+    } else {
+      this.showLoginFirst();
+    }
   }
-  // else {
-  //   this.showLoginFirstMessage = true;
-  //   setTimeout(() => {
-  //     this.showLoginFirstMessage = false;
-  //   }, 2000);
-  // }
 
   showLoginFirst(): void {
     this.showLoginFirstMessage = true;

@@ -47,14 +47,12 @@ export class WishlistComponent implements OnInit {
   }
 
   addToCart(wishlistItem: Wishlist): void {
-    this.productService
-      .getProduct(wishlistItem.productId)
-      .subscribe((product) => {
-        let addedCartItem = new CartItem(product);
-        this.cartService.addToCart(addedCartItem);
-        this.removeWishlistItem(wishlistItem.productId);
-        this.message = this.wishlistService.addedToWishListMessage;
-      });
+    const product = wishlistItem.productDetails;
+
+    let addedCartItem = new CartItem(product);
+    this.cartService.addToCart(addedCartItem);
+    this.removeWishlistItem(wishlistItem.productId);
+    this.message = this.wishlistService.addedToWishListMessage;
   }
 
   removeWishlistItem(productId: number): void {

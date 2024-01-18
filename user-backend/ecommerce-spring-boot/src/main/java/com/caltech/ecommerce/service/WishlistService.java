@@ -7,6 +7,7 @@ import com.caltech.ecommerce.repository.UserRepository;
 import com.caltech.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -44,13 +45,17 @@ public class WishlistService {
     }
 
     // Remove an item from the wishlist
+    @Transactional
     public void removeFromWishlist(Long userId, Long productId) {
-        wishlistRepository.deleteByIdUserIdAndProductId(userId, productId);
+        wishlistRepository.deleteWishlistEntry(userId, productId);
     }
 
+
     // Check if an item is in the wishlist
+    @Transactional
     public boolean isItemInWishlist(Long userId, Long productId) {
-        Optional<Wishlist> wishlistItem = wishlistRepository.findByIdUserIdAndProductId(userId, productId);
-        return wishlistItem.isPresent();
+        WishlistId id = new WishlistId(userId, productId);
+        return wishlistRepository.findById(id).isPresent();
     }
+
 }

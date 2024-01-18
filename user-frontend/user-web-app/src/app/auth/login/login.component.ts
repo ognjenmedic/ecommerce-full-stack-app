@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit {
           (user.expiry = now.getTime() + 900000),
             localStorage.setItem('user', JSON.stringify(user));
           console.log(user);
-          this.userService.userState.next(user);
           this.router.navigate(['']);
         } else {
           alert('user not found');

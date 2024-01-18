@@ -48,8 +48,6 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
-  // Find the product that corresponds with the id provided in route.
-
   fetchProduct(productId: number): void {
     this.productsService
       .getProduct(productId)
@@ -65,21 +63,22 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addItemToWishlist(product: Product) {
-    let wishlist: any = this.userService.userState.getValue().wishlist; // existing wishlist
-    let addedWishlistItem = new Wishlist(product); // new item to be added
-    wishlist.push(product);
-
-    let existingWishlistItem = this.wishlistService.wishlistItems.find(
-      (item) => item.productId === addedWishlistItem.productId
-    );
-    if (existingWishlistItem) {
-      alert('Product already in Wish List!');
-    } else {
-      this.wishlistService.wishlistItems.push(addedWishlistItem);
-
-      this.wishlistService.postWishlistItem(wishlist).subscribe((res) => {
-        alert('Product added to Wish List!');
-      });
-    }
+    this.userService.currentUser.subscribe((user) => {
+      if (user) {
+        this.wishlistService
+          .isItemInWishlist(user.userId, product.productId)
+          .subscribe((isInWishlist) => {
+            if (isInWishlist) {
+              alert('Product already in Wish List!');
+            } else {
+              this.wishlistService
+                .addToWishlist(user.userId, product.productId)
+                .subscribe(() => {
+                  alert('Product added to Wish List!');
+                });
+            }
+          });
+      }
+    });
   }
 }

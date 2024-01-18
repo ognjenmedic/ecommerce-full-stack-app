@@ -38,16 +38,12 @@ export class CartDetailsComponent implements OnInit {
     this.listCartDetails();
   }
   listCartDetails() {
-    // get a handle to the cart items
     this.cartItems = this.cartService.cartItems;
-    // subscribe to the cart totalPrice
     this.cartService.totalPrice$.subscribe((data) => (this.totalPrice = data));
 
-    // subscribe to the cart totalQuantity
     this.cartService.totalQuantity$.subscribe(
       (data) => (this.totalQuantity = data)
     );
-    // compute cart total price and quantity
     this.cartService.computeCartTotals();
   }
 
@@ -56,33 +52,36 @@ export class CartDetailsComponent implements OnInit {
     this.cartService.computeCartTotals();
   }
 
-  addItemToWishlist(product: any, index: number) {
-    let wishlist;
-    this.wishlistService.getWishlistItems().subscribe((res) => {
-      wishlist = res;
-      console.log(wishlist);
-      let addedWishlistItem = new Wishlist(product); // new item to be added
-      wishlist.push(product);
+  addItemToWishlist(product: Product, index: number) {
+    this.userService.currentUser.subscribe((user) => {
+      if (user && user.userId) {
+        this.wishlistService
+          .isItemInWishlist(user.userId, product.productId)
+          .subscribe((isInWishlist) => {
+            if (isInWishlist) {
+              this.showExistingMessage = true;
+              setTimeout(() => {
+                this.showExistingMessage = false;
+              }, 2000);
+            } else {
+              let addedWishlistItem: Wishlist = {
+                userId: user.userId,
+                productId: product.productId,
+                productDetails: product,
+              };
 
-      let existingWishlistItem = this.wishlistService.wishlistItems.find(
-        (item) => item.productId === addedWishlistItem.productId
-      );
-      if (existingWishlistItem) {
-        this.showExistingMessage = true;
-        setTimeout(() => {
-          this.showExistingMessage = false;
-        }, 2000);
-      } else {
-        this.wishlistService.wishlistItems.push(addedWishlistItem);
-
-        this.wishlistService.postWishlistItem(wishlist).subscribe((res) => {
-          this.showMovedMessage = true;
-          setTimeout(() => {
-            this.showMovedMessage = false;
-          }, 2000);
-          this.removeCartItem(index);
-        });
+              this.wishlistService
+                .addToWishlist(user.userId, product.productId)
+                .subscribe(() => {
+                  this.showMovedMessage = true;
+                  setTimeout(() => {
+                    this.showMovedMessage = false;
+                  }, 2000);
+                  this.removeCartItem(index);
+                });
+            }
+          });
       }
-    }); // existing wishlist
+    });
   }
 }
