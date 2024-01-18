@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist, WishlistId> {
 
-    @Query("SELECT w FROM Wishlist w WHERE w.user.userId = :userId")
+    @Query("SELECT w FROM Wishlist w JOIN FETCH w.product WHERE w.user.userId = :userId")
     List<Wishlist> findByUserId(@Param("userId") Long userId);
 
-    Optional<Wishlist> findByIdUserIdAndIdProductId(Long userId, Long productId);
+    Optional<Wishlist> findByIdUserIdAndProductId(Long userId, Long productId);
 
-    void deleteByIdUserIdAndIdProductId(Long userId, Long productId);
+    void deleteByIdUserIdAndProductId(Long userId, Long productId);
 }

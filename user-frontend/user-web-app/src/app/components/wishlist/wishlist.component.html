@@ -7,8 +7,11 @@
       <p class="text-base text-gray-600 mt-4 mb-1"></p>
     </div>
     <hr />
+    <div *ngIf="message" class="alert alert-info">
+      {{ message }}
+    </div>
     <div
-      *ngIf="wishlistService.wishlistItems.length <= 0"
+      *ngIf="showEmptyWishlistMessage"
       class="flex items-center justify-center flex-col space-y-4 py-10"
     >
       <div
@@ -17,7 +20,7 @@
         <p class="flex text-center justify-center">
           <!-- <span class="material-icons mr-2">insert_emoticon</span> -->
 
-          {{ wishlistService.emptyWishlistMessage }}
+          {{ message }}
         </p>
       </div>
       <button
@@ -29,10 +32,7 @@
     </div>
 
     <div
-      *ngFor="
-        let tempWishlistItem of wishlistService.wishlistItems;
-        let i = index
-      "
+      *ngFor="let tempWishlistItem of wishlistItems; let i = index"
       class="flex flex-col md:flex-row items-strech mt-10 mb-5 md:mt-14 lg:mt-16"
     >
       <div>

@@ -1,64 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, EMPTY } from 'rxjs';
 import { Wishlist } from 'src/app/models/wishlist';
 import { UserService } from './user.service';
-import { of, tap, map, EMPTY } from 'rxjs';
-import { WishlistResponse } from 'src/app/models/wishlist-response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WishlistService {
-  private baseUrl: string;
-  wishlistItems: Wishlist[];
-  userId: number;
-  addedToWishListMessage: string;
-  existingWishListMessage: string;
-  movedToWishListMessage: string;
-  removedMessage: string;
-  emptyWishlistMessage: string;
-  loginFirstMessage: string;
+  private baseUrl: string = 'http://localhost:8080/wishlist';
 
-  constructor(private http: HttpClient, private userService: UserService) {
-    this.wishlistItems = [];
-    this.checkUserState();
-    this.addedToWishListMessage = 'Product added to Wish List!';
-    this.existingWishListMessage = 'Product already in Wish List!';
-    this.movedToWishListMessage = 'Product moved to Wish List!';
-    this.removedMessage = 'Product removed from Cart!';
-    this.emptyWishlistMessage =
-      'Your Wish List is empty... Check out our latest products now!';
-    this.loginFirstMessage = 'Please Log In';
-    this.baseUrl = 'http://localhost:8080';
+  addedToWishListMessage = 'Product added to Wish List!';
+  existingWishListMessage = 'Product already in Wish List!';
+  removedMessage = 'Product removed from Wish List!';
+  emptyWishlistMessage =
+    'Your Wish List is empty... Check out our latest products now!';
+  loginFirstMessage = 'Please Log In';
+
+  constructor(private http: HttpClient, private userService: UserService) {}
+
+  getWishlistItems(userId: number): Observable<Wishlist[]> {
+    if (!userId) return EMPTY;
+    return this.http.get<Wishlist[]>(`${this.baseUrl}/${userId}`);
   }
 
-  checkUserState() {
-    this.userService.userState.subscribe((res) => {
-      if (res) {
-        this.userId = res.id;
-      } else {
-        this.wishlistItems = [];
-      }
+  addToWishlist(userId: number, productId: number): Observable<Wishlist> {
+    return this.http.post<Wishlist>(`${this.baseUrl}/add`, {
+      userId,
+      productId,
     });
   }
 
-  postWishlistItem(wishlist) {
-    return this.http.patch(`${this.baseUrl}/signedUpUsersList/${this.userId}`, {
-      wishlist: wishlist,
+  removeFromWishlist(userId: number, productId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/remove`, {
+      params: { userId, productId },
     });
   }
 
-  getWishlistItems() {
-    if (this.userId) {
-      return this.http
-        .get(`${this.baseUrl}/signedUpUsersList/${this.userId}`)
-        .pipe(
-          map((data: any) => {
-            return data.wishlist;
-          })
-        );
-    } else {
-      return EMPTY;
-    }
+  isItemInWishlist(userId: number, productId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/check`, {
+      params: { userId, productId },
+    });
   }
 }
