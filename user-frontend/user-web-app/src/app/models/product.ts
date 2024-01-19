@@ -2,11 +2,11 @@ import { Category } from './category';
 
 export interface Product {
   productId: number;
-  sku: string;
+  sku?: string;
   productName: string;
   imageUrl: string;
   description: string;
   unitPrice: number;
-  category: Category;
-  unitsInStock: number;
+  category?: Category;
+  unitsInStock?: number;
 }

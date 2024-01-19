@@ -1,5 +1,6 @@
 package com.caltech.ecommerce.controller;
 
+import com.caltech.ecommerce.dto.WishlistDTO;
 import com.caltech.ecommerce.entity.Wishlist;
 import com.caltech.ecommerce.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("wishlist")
+@CrossOrigin(origins = "http://localhost:4200")
 public class WishlistController {
 
     private final WishlistService wishlistService;
@@ -20,14 +22,17 @@ public class WishlistController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Wishlist>> getWishlistByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(wishlistService.getWishlistByUserId(userId));
+    public ResponseEntity<List<WishlistDTO>> getWishlistByUser(@PathVariable Long userId) {
+        List<WishlistDTO> wishlist = wishlistService.getWishlistByUserId(userId);
+        return ResponseEntity.ok(wishlist);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Wishlist> addToWishlist(@RequestParam Long userId, @RequestParam Long productId) {
-        return ResponseEntity.ok(wishlistService.addToWishlist(userId, productId));
+    public ResponseEntity<WishlistDTO> addToWishlist(@RequestBody WishlistDTO wishlistDTO) {
+        WishlistDTO newWishlist = wishlistService.addToWishlist(wishlistDTO);
+        return ResponseEntity.ok(newWishlist);
     }
+
 
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeFromWishlist(@RequestParam Long userId, @RequestParam Long productId) {

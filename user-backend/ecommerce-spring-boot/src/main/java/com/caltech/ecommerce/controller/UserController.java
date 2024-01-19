@@ -1,5 +1,6 @@
 package com.caltech.ecommerce.controller;
 
+import com.caltech.ecommerce.dto.UserDTO;
 import com.caltech.ecommerce.entity.User;
 import com.caltech.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> loginUser(@RequestBody User user){
         User existingUser = userService.findUserByEmail(user.getEmail());
         if(existingUser != null && existingUser.getPassword().equals(user.getPassword())){
-            return new ResponseEntity<>(existingUser, HttpStatus.OK);
+            UserDTO userDTO = userService.convertToDTO(existingUser);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }

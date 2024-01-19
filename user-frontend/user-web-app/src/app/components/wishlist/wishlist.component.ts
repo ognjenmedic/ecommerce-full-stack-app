@@ -35,8 +35,18 @@ export class WishlistComponent implements OnInit {
         this.userId = user.userId;
         this.wishlistService
           .getWishlistItems(this.userId)
-          .subscribe((items: any) => {
-            this.wishlistItems = items;
+          .subscribe((items: any[]) => {
+            this.wishlistItems = items.map((item) => ({
+              userId: item.userId,
+              productId: item.productId,
+              productDetails: {
+                productId: item.productId,
+                productName: item.productName,
+                imageUrl: item.imageUrl,
+                description: item.description,
+                unitPrice: item.unitPrice,
+              },
+            }));
             this.showEmptyWishlistMessage = items.length === 0;
             this.message = this.showEmptyWishlistMessage
               ? this.wishlistService.emptyWishlistMessage
