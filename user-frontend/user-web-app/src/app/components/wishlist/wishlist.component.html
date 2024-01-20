@@ -7,9 +7,7 @@
       <p class="text-base text-gray-600 mt-4 mb-1"></p>
     </div>
     <hr />
-    <div *ngIf="message" class="alert alert-info">
-      {{ message }}
-    </div>
+
     <div
       *ngIf="showEmptyWishlistMessage"
       class="flex items-center justify-center flex-col space-y-4 py-10"
@@ -24,12 +22,39 @@
         </p>
       </div>
       <button
+        *ngIf="showShopNowButton"
         routerLink="/"
         class="mx-2 my-2 bg-gray-900 hover:bg-gray-700 transition duration-150 ease-in-out rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs mb-4"
       >
         Shop Now!
       </button>
     </div>
+
+    <ng-container *ngIf="showRemovedFromWishlistMessage">
+      <div class="flex items-center justify-center">
+        <div
+          class="border-black text-gray-500 p-2 rounded-lg border-2 shadow-md animate-fade-out w-full xl:w-1/4 my-4"
+        >
+          <p class="flex items-center justify-center">
+            <span class="material-icons mr-2">check_circle</span>
+            {{ wishlistService.removedFromWishlistMessage }}
+          </p>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="showAddedToCartMessage">
+      <div class="flex items-center justify-center">
+        <div
+          class="border-black text-green-500 p-2 rounded-lg border-2 shadow-md animate-fade-out w-full xl:w-1/4 my-4"
+        >
+          <p class="flex items-center justify-center">
+            <span class="material-icons mr-2">check_circle</span>
+            {{ wishlistService.addedToCartMessage }}
+          </p>
+        </div>
+      </div>
+    </ng-container>
 
     <div
       *ngFor="let tempWishlistItem of wishlistItems; let i = index"
@@ -62,7 +87,7 @@
           </p>
           <div class="mt-8 flex space-x-6 items-center">
             <a
-              (click)="removeWishlistItem(i)"
+              (click)="removeWishlistItem(tempWishlistItem.productId)"
               class="text-base text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-gray-600 hover:text-black cursor-pointer"
               >Remove</a
             >

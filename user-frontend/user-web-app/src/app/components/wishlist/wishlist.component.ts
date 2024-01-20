@@ -16,6 +16,9 @@ import * as feather from 'feather-icons';
 export class WishlistComponent implements OnInit {
   wishlistItems: Wishlist[];
   showEmptyWishlistMessage: boolean;
+  showRemovedFromWishlistMessage: boolean;
+  showAddedToCartMessage: boolean;
+  showShopNowButton: boolean;
   userId: number;
   message: string = '';
 
@@ -26,6 +29,9 @@ export class WishlistComponent implements OnInit {
     private productService: ProductsService
   ) {
     this.showEmptyWishlistMessage = false;
+    this.showRemovedFromWishlistMessage = false;
+    this.showAddedToCartMessage = false;
+    this.showShopNowButton = false;
     this.wishlistItems = [];
   }
 
@@ -58,14 +64,23 @@ export class WishlistComponent implements OnInit {
 
   addToCart(wishlistItem: Wishlist): void {
     const product = wishlistItem.productDetails;
-
     let addedCartItem = new CartItem(product);
     this.cartService.addToCart(addedCartItem);
-    this.removeWishlistItem(wishlistItem.productId);
-    this.message = this.wishlistService.addedToWishListMessage;
+
+    this.removeWishlistItem(wishlistItem.productId, true);
+
+    this.showAddedToCartMessage = true;
+    setTimeout(() => {
+      this.showAddedToCartMessage = false;
+      if (this.wishlistItems.length === 0) {
+        this.showEmptyWishlistMessage = true;
+        this.showShopNowButton = true;
+        this.message = this.wishlistService.emptyWishlistMessage;
+      }
+    }, 2000);
   }
 
-  removeWishlistItem(productId: number): void {
+  removeWishlistItem(productId: number, isAddingToCart: boolean = false): void {
     this.wishlistService
       .removeFromWishlist(this.userId, productId)
       .subscribe(() => {
@@ -73,10 +88,26 @@ export class WishlistComponent implements OnInit {
           (item) => item.productId !== productId
         );
         this.showEmptyWishlistMessage = this.wishlistItems.length === 0;
-        this.message =
-          this.wishlistItems.length === 0
-            ? this.wishlistService.emptyWishlistMessage
-            : this.wishlistService.removedMessage;
+
+        if (!isAddingToCart) {
+          this.showRemovedFromWishlistMessage = true;
+          setTimeout(() => {
+            this.showRemovedFromWishlistMessage = false;
+            if (this.wishlistItems.length === 0) {
+              this.showEmptyWishlistMessage = true;
+              this.showShopNowButton = true;
+              this.message = this.wishlistService.emptyWishlistMessage;
+            }
+          }, 2000);
+        } else {
+          if (this.wishlistItems.length === 0) {
+            setTimeout(() => {
+              this.showEmptyWishlistMessage = true;
+              this.showShopNowButton = true;
+              this.message = this.wishlistService.emptyWishlistMessage;
+            }, 2000);
+          }
+        }
       });
   }
 }

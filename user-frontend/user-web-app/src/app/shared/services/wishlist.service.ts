@@ -13,6 +13,8 @@ export class WishlistService {
   addedToWishListMessage: string;
   existingWishListMessage: string;
   movedToWishListMessage: string;
+  removedFromWishlistMessage: string;
+  addedToCartMessage: string;
   removedMessage: string;
   emptyWishlistMessage: string;
   loginFirstMessage: string;
@@ -21,6 +23,8 @@ export class WishlistService {
     this.addedToWishListMessage = 'Product added to Wish List!';
     this.existingWishListMessage = 'Product already in Wish List!';
     this.movedToWishListMessage = 'Product moved to Wish List!';
+    this.removedFromWishlistMessage = 'Product removed from Wishlist';
+    this.addedToCartMessage = 'Product added to Cart';
     this.removedMessage = 'Product removed from Cart!';
     this.emptyWishlistMessage =
       'Your Wish List is empty... Check out our latest products now!';
