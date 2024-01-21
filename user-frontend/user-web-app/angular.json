@@ -84,10 +84,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": [
-              "src/styles.css",
-              "node_modules/@okta/okta-signin-widget/dis/css/okta-sign-in.min.css"
-            ],
+            "styles": ["src/styles.css"],
             "scripts": []
           }
         }
