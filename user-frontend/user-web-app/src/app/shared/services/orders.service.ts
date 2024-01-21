@@ -6,9 +6,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class OrdersService {
+  orderPlacedMessage: string;
   private baseUrl: string;
   orders: Order[];
   constructor(private http: HttpClient) {
+    this.orderPlacedMessage = 'Your order has been placed!';
     this.orders = [];
     this.baseUrl = 'http://localhost:8080';
   }

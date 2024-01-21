@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Cart } from 'src/app/models/cart';
 import { CartItem } from 'src/app/models/cart-item';
 import { Product } from 'src/app/models/product';
 import { Wishlist } from 'src/app/models/wishlist';
@@ -12,11 +13,7 @@ import { WishlistService } from 'src/app/shared/services/wishlist.service';
   styleUrls: ['./cart-details.component.css'],
 })
 export class CartDetailsComponent implements OnInit {
-  cartItems: CartItem[];
-  totalPrice: number;
-  totalQuantity: number;
-  index: number;
-  product: Product;
+  cart: Cart;
   showMovedMessage: boolean;
   showExistingMessage: boolean;
   showRemovedMessage: boolean;
@@ -26,33 +23,52 @@ export class CartDetailsComponent implements OnInit {
     public wishlistService: WishlistService,
     private userService: UserService
   ) {
-    this.cartItems = [];
-    this.totalPrice = 0;
-    this.totalQuantity = 0;
+    this.cart = new Cart();
     this.showMovedMessage = false;
     this.showExistingMessage = false;
     this.showRemovedMessage = false;
   }
 
   ngOnInit(): void {
-    this.listCartDetails();
-  }
-  listCartDetails() {
-    this.cartItems = this.cartService.cartItems;
-    this.cartService.totalPrice$.subscribe((data) => (this.totalPrice = data));
-
-    this.cartService.totalQuantity$.subscribe(
-      (data) => (this.totalQuantity = data)
-    );
-    this.cartService.computeCartTotals();
+    this.loadCartDetails();
   }
 
-  removeCartItem(index: number) {
-    this.cartService.removeCartItem(index);
-    this.cartService.computeCartTotals();
+  loadCartDetails() {
+    this.userService.currentUser.subscribe((user) => {
+      if (user) {
+        this.cartService.getCart(user.userId).subscribe((cartData) => {
+          console.log(cartData);
+          this.cart = cartData;
+        });
+      }
+    });
   }
 
-  addItemToWishlist(product: Product, index: number) {
+  removeCartItem(productId: number) {
+    this.userService.currentUser.subscribe((user) => {
+      console.log('Current user object:', user);
+      console.log('User ID:', user?.userId);
+      console.log('Product ID to remove:', productId);
+      if (user && user.userId && productId != null) {
+        console.log(
+          `Removing product with ID ${productId} for user with ID ${user.userId}`
+        );
+        this.cartService
+          .removeCartItem(user.userId, productId)
+          .subscribe((cartData) => {
+            this.cart = cartData;
+            this.showRemovedMessage = true;
+            setTimeout(() => {
+              this.showRemovedMessage = false;
+            }, 2000);
+          });
+      } else {
+        console.error('User ID or Product ID is null');
+      }
+    });
+  }
+
+  addItemToWishlist(product: Product) {
     this.userService.currentUser.subscribe((user) => {
       if (user && user.userId) {
         this.wishlistService
@@ -77,7 +93,7 @@ export class CartDetailsComponent implements OnInit {
                   setTimeout(() => {
                     this.showMovedMessage = false;
                   }, 2000);
-                  this.removeCartItem(index);
+                  this.removeCartItem(product.productId);
                 });
             }
           });

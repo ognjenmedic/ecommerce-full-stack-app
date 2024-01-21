@@ -18,6 +18,8 @@ import { CartService } from 'src/app/shared/services/cart.service';
 export class CheckoutComponent implements OnInit {
   checkoutFormGroup: FormGroup;
   orderData: any;
+  showOrderPlacedMessage: boolean;
+  orderPlacedMessage: string;
 
   totalPrice: number;
   totalQuantity: number;
@@ -35,6 +37,8 @@ export class CheckoutComponent implements OnInit {
     this.totalQuantity = 0;
     this.creditCardMonths = [];
     this.creditCardYears = [];
+    this.showOrderPlacedMessage = false;
+    this.orderPlacedMessage = this.ordersService.orderPlacedMessage;
   }
 
   ngOnInit(): void {
@@ -162,15 +166,17 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
-    const orderData = {
-      ...this.checkoutFormGroup.value,
-      products: this.cartService.cartItems,
-      totalQuantity: this.totalQuantity,
-      totalPrice: this.totalPrice,
-    };
-    this.ordersService.placeOrder(orderData).subscribe((res) => {
-      alert('Your order has been placed.');
-      this.checkoutFormGroup.reset;
+    this.cartService.getCurrentCart().subscribe((currentCart) => {
+      const orderData = {
+        ...this.checkoutFormGroup.value,
+        products: currentCart.cartItems,
+        totalQuantity: this.totalQuantity,
+        totalPrice: this.totalPrice,
+      };
+      this.ordersService.placeOrder(orderData).subscribe((res) => {
+        this.showOrderPlacedMessage = true;
+        this.checkoutFormGroup.reset;
+      });
     });
   }
 }

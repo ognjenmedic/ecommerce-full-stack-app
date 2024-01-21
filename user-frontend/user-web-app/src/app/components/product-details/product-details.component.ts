@@ -15,6 +15,7 @@ import { Wishlist } from 'src/app/models/wishlist';
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product;
+  showLoginFirstMessage: boolean;
 
   num: number = 1;
 
@@ -33,7 +34,9 @@ export class ProductDetailsComponent implements OnInit {
     private cartService: CartService,
     private userService: UserService,
     private wishlistService: WishlistService
-  ) {}
+  ) {
+    this.showLoginFirstMessage = false;
+  }
 
   ngOnInit(): void {
     // First get the product id from the current route.
@@ -55,11 +58,27 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart(product: Product) {
-    console.log(`Adding to cart: ${product.productName}, ${product.unitPrice}`);
+    if (this.userService.isAuthenticated) {
+      this.userService.currentUser.subscribe((user) => {
+        if (user && user.userId) {
+          console.log(
+            `Adding to cart: ${product.productName}, ${product.unitPrice}`
+          );
 
-    console.log(product);
-    const addedCartItem = new CartItem(product);
-    this.cartService.addToCart(addedCartItem);
+          const userId = user.userId;
+          const productId = product.productId;
+          const quantity = this.num;
+
+          this.cartService
+            .addToCart(userId, productId, quantity)
+            .subscribe(() => {
+              console.log(product);
+            });
+        }
+      });
+    } else {
+      this.showLoginFirst();
+    }
   }
 
   addItemToWishlist(product: Product) {
@@ -80,5 +99,13 @@ export class ProductDetailsComponent implements OnInit {
           });
       }
     });
+  }
+
+  showLoginFirst(): void {
+    this.showLoginFirstMessage = true;
+    console.log(this.showLoginFirstMessage);
+    setTimeout(() => {
+      this.showLoginFirstMessage = false;
+    }, 2000);
   }
 }

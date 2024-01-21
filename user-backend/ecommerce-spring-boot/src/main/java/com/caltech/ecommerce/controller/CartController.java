@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("cart")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CartController {
 
     @Autowired
@@ -24,15 +25,19 @@ public class CartController {
         return ResponseEntity.ok(cartDTO);    }
 
     @PostMapping("/add")
-    public Cart addToCart(@RequestBody AddToCartRequest addToCartRequest) {
-        return cartService.addToCart(addToCartRequest.getUserId(),
+    public ResponseEntity<CartDTO> addToCart(@RequestBody AddToCartRequest addToCartRequest) {
+        Cart cart = cartService.addToCart(addToCartRequest.getUserId(),
                 addToCartRequest.getProductId(),
                 addToCartRequest.getQuantity());
+        CartDTO cartDTO = cartService.convertToDTO(cart);
+        return ResponseEntity.ok(cartDTO);
     }
 
     @PostMapping("/remove")
-    public Cart removeFromCart(@RequestParam Long userId, @RequestParam Long productId) {
-        return cartService.removeFromCart(userId, productId);
+    public ResponseEntity<CartDTO> removeFromCart(@RequestParam Long userId, @RequestParam Long productId) {
+        Cart cart = cartService.removeFromCart(userId, productId);
+        CartDTO cartDTO = cartService.convertToDTO(cart);
+        return ResponseEntity.ok(cartDTO);
     }
 
     @GetMapping("/total")

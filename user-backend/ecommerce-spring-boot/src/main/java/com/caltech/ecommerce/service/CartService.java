@@ -2,6 +2,7 @@ package com.caltech.ecommerce.service;
 
 import com.caltech.ecommerce.dto.CartDTO;
 import com.caltech.ecommerce.dto.CartItemDTO;
+import com.caltech.ecommerce.dto.ProductDTO;
 import com.caltech.ecommerce.entity.Cart;
 import com.caltech.ecommerce.entity.CartItem;
 import com.caltech.ecommerce.entity.Product;
@@ -86,7 +87,19 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Cart cart = user.getCart();
         if (cart != null) {
-            cart.getCartItems().removeIf(item -> item.getProduct().getProductId().equals(productId));
+            Optional<CartItem> cartItemOptional = cart.getCartItems().stream()
+                    .filter(item -> item.getProduct().getProductId().equals(productId))
+                    .findFirst();
+
+            cartItemOptional.ifPresent(cartItem -> {
+                if (cartItem.getQuantity() > 1) {
+                    cartItem.setQuantity(cartItem.getQuantity() - 1);
+                } else {
+                    cart.getCartItems().remove(cartItem);
+                }
+            });
+            BigDecimal newTotal = calculateCartTotal(cart.getCartId());
+            cart.setTotalPrice(newTotal);
         }
 
         return cartRepository.save(cart);
@@ -117,6 +130,15 @@ public class CartService {
         cartItemDTO.setCartItemId(cartItem.getCartItemId());
         cartItemDTO.setProductId(cartItem.getProduct().getProductId());
         cartItemDTO.setQuantity(cartItem.getQuantity());
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setImageUrl(cartItem.getProduct().getImageUrl());
+        productDTO.setProductName(cartItem.getProduct().getProductName());
+        productDTO.setDescription(cartItem.getProduct().getDescription());
+        productDTO.setUnitPrice(cartItem.getProduct().getUnitPrice());
+
+        cartItemDTO.setProduct(productDTO);
+
         return cartItemDTO;
     }
 

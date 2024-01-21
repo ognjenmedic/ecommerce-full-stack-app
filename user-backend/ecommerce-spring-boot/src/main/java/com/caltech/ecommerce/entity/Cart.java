@@ -1,5 +1,7 @@
 package com.caltech.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -19,6 +21,7 @@ public class Cart {
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<CartItem> cartItems = new HashSet<>();
 
     @Column(name = "total_price")

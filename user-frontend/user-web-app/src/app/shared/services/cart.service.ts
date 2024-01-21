@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap, throwError } from 'rxjs';
 import { Cart } from 'src/app/models/cart';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private baseUrl = 'http://localhost:8080/';
+  private baseUrl = 'http://localhost:8080';
   private currentCart$: BehaviorSubject<Cart> = new BehaviorSubject<Cart>(
     new Cart()
   );
@@ -49,8 +49,17 @@ export class CartService {
   }
 
   removeCartItem(userId: number, productId: number): Observable<Cart> {
+    if (userId == null || productId == null) {
+      console.error('Cannot remove cart item: userId or productId is null');
+      return throwError('UserId or ProductId is null');
+    }
+
+    const params = new HttpParams()
+      .set('userId', userId.toString())
+      .set('productId', productId.toString());
+
     return this.http
-      .post<Cart>(`${this.baseUrl}/cart/remove`, { userId, productId })
+      .post<Cart>(`${this.baseUrl}/cart/remove`, null, { params })
       .pipe(
         tap((cart) => {
           this.updateCurrentCart(cart);

@@ -13,6 +13,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log('Initial user from localStorage:', user);
     this.userState = new BehaviorSubject<User | null>(user);
   }
 
@@ -21,9 +22,11 @@ export class UserService {
   }
 
   public login(email: string, password: string): Observable<User> {
+    console.log('Login method called');
     const credentials = { email, password };
     return this.http.post<User>(`${this.baseUrl}/login`, credentials).pipe(
       tap((user) => {
+        console.log('User logged in:', user);
         this.userState.next(user);
         localStorage.setItem('user', JSON.stringify(user));
       })
@@ -31,6 +34,7 @@ export class UserService {
   }
 
   public logout(): void {
+    console.log('User logged out');
     this.userState.next(null);
     localStorage.removeItem('user');
   }
@@ -44,6 +48,7 @@ export class UserService {
   }
 
   public updateUserState(user: User | null): void {
+    console.log('Updating user state:', user);
     this.userState.next(user);
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));

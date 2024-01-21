@@ -26,6 +26,18 @@
           Check out
         </p>
         <hr />
+        <ng-container *ngIf="showOrderPlacedMessage">
+          <div class="flex items-center justify-center">
+            <div
+              class="border-black text-green-500 p-2 rounded-lg border-2 shadow-md animate-fade-out w-full xl:w-1/4 my-4"
+            >
+              <p class="flex items-center justify-center">
+                <span class="material-icons mr-2">check_circle</span>
+                {{ orderPlacedMessage }}
+              </p>
+            </div>
+          </div>
+        </ng-container>
         <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
           <!--customer form group-->
           <div formGroupName="customer">

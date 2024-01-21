@@ -32,11 +32,27 @@ export class ProductCardComponent implements OnInit {
   ngOnInit(): void {}
 
   addToCart(product: Product) {
-    console.log(`Adding to cart: ${product.productName}, ${product.unitPrice}`);
+    if (this.userService.isAuthenticated) {
+      this.userService.currentUser.subscribe((user) => {
+        if (user && user.userId) {
+          console.log(
+            `Adding to cart: ${product.productName}, ${product.unitPrice}`
+          );
 
-    console.log(product);
-    const addedCartItem = new CartItem(product);
-    this.cartService.addToCart(addedCartItem);
+          const userId = user.userId;
+          const productId = product.productId;
+          const quantity = 1;
+
+          this.cartService
+            .addToCart(userId, productId, quantity)
+            .subscribe(() => {
+              console.log(product);
+            });
+        }
+      });
+    } else {
+      this.showLoginFirst();
+    }
   }
 
   addItemToWishlist(product: Product) {
