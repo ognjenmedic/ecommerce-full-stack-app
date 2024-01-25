@@ -26,7 +26,7 @@ export class WishlistComponent implements OnInit {
   showAddedToCartMessage: boolean;
   showLoginFirstMessage: boolean;
   showShopNowButton: boolean;
-  userId: number;
+  userId: string;
   message: string = '';
 
   constructor(

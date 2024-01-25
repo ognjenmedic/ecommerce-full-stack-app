@@ -1,4 +1,3 @@
-import { UserService } from '../../shared/services/user.service';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -7,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -34,33 +34,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  setWithExpiry(user, value, ttl) {
-    const now = new Date();
-    const item = {
-      value: value,
-      expiry: now.getTime() + ttl,
-    };
-  }
-
   login() {
-    const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
-    this.userService.login(email, password).subscribe(
-      (user) => {
-        if (user) {
-          this.loginForm.reset();
-          const now = new Date();
+    const email = this.loginForm.get('email')?.value;
+    const password = this.loginForm.get('password')?.value;
 
-          (user.expiry = now.getTime() + 900000),
-            localStorage.setItem('user', JSON.stringify(user));
-          console.log(user);
-          this.router.navigate(['']);
-        } else {
-          alert('user not found');
-        }
+    this.userService.login(email, password).subscribe(
+      (response) => {
+        console.log('Login successful', response);
       },
-      (err) => {
-        alert('Something went wrong');
+      (error) => {
+        console.error('Login failed', error);
       }
     );
   }

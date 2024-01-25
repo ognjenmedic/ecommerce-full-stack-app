@@ -2,6 +2,7 @@ import { OrdersService } from './shared/services/orders.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthModule } from '@auth0/auth0-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,6 +27,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { RouterModule } from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { LoginAuth0Component } from './auth/login-auth0/login-auth0.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,7 @@ import { RouterModule } from '@angular/router';
     RegisterComponent,
     PaymentComponent,
     WishlistComponent,
+    LoginAuth0Component,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +57,10 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    AuthModule.forRoot({
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.clientId,
+    }),
   ],
   providers: [ProductsService, UserService, OrdersService],
   bootstrap: [AppComponent],

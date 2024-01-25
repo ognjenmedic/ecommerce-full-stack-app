@@ -20,12 +20,12 @@ export class CartService {
     this.totalQuantity$ = new BehaviorSubject<number>(0);
   }
 
-  getCart(userId: number): Observable<Cart> {
+  getCart(userId: string): Observable<Cart> {
     return this.http.get<Cart>(`${this.baseUrl}/cart/user/${userId}`);
   }
 
   addToCart(
-    userId: number,
+    userId: string,
     productId: number,
     quantity: number
   ): Observable<Cart> {
@@ -48,7 +48,7 @@ export class CartService {
     this.updateCurrentCart(cart);
   }
 
-  removeCartItem(userId: number, productId: number): Observable<Cart> {
+  removeCartItem(userId: string, productId: number): Observable<Cart> {
     if (userId == null || productId == null) {
       console.error('Cannot remove cart item: userId or productId is null');
       return throwError('UserId or ProductId is null');

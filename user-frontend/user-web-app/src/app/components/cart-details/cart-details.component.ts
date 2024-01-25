@@ -35,9 +35,8 @@ export class CartDetailsComponent implements OnInit {
 
   loadCartDetails() {
     this.userService.currentUser.subscribe((user) => {
-      if (user) {
+      if (user?.userId) {
         this.cartService.getCart(user.userId).subscribe((cartData) => {
-          console.log(cartData);
           this.cart = cartData;
         });
       }
@@ -46,13 +45,7 @@ export class CartDetailsComponent implements OnInit {
 
   removeCartItem(productId: number) {
     this.userService.currentUser.subscribe((user) => {
-      console.log('Current user object:', user);
-      console.log('User ID:', user?.userId);
-      console.log('Product ID to remove:', productId);
-      if (user && user.userId && productId != null) {
-        console.log(
-          `Removing product with ID ${productId} for user with ID ${user.userId}`
-        );
+      if (user?.userId && productId != null) {
         this.cartService
           .removeCartItem(user.userId, productId)
           .subscribe((cartData) => {
@@ -70,7 +63,7 @@ export class CartDetailsComponent implements OnInit {
 
   addItemToWishlist(product: Product) {
     this.userService.currentUser.subscribe((user) => {
-      if (user && user.userId) {
+      if (user?.userId) {
         this.wishlistService
           .isItemInWishlist(user.userId, product.productId)
           .subscribe((isInWishlist) => {
@@ -80,12 +73,6 @@ export class CartDetailsComponent implements OnInit {
                 this.showExistingMessage = false;
               }, 2000);
             } else {
-              let addedWishlistItem: Wishlist = {
-                userId: user.userId,
-                productId: product.productId,
-                productDetails: product,
-              };
-
               this.wishlistService
                 .addToWishlist(user.userId, product.productId)
                 .subscribe(() => {

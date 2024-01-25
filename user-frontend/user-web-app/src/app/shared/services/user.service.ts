@@ -1,8 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '@auth0/auth0-angular';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { RegistrationData } from 'src/app/models/registration-data';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,30 +14,54 @@ export class UserService {
   private userState: BehaviorSubject<User | null>;
   private baseUrl: string = 'http://localhost:8080/users';
 
-  constructor(private http: HttpClient) {
-    const user = JSON.parse(localStorage.getItem('user'));
-    console.log('Initial user from localStorage:', user);
-    this.userState = new BehaviorSubject<User | null>(user);
+  constructor(private http: HttpClient, public auth: AuthService) {
+    this.userState = new BehaviorSubject<User | null>(null);
+
+    this.auth.isAuthenticated$.subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.auth.user$.subscribe((auth0User) => {
+          if (auth0User) {
+            // Map Auth0 user properties to your User interface
+            const user: User = {
+              userId: auth0User.sub,
+              name: auth0User.name || '',
+              email: auth0User.email || '',
+              wishlists: [],
+            };
+            this.userState.next(user);
+            localStorage.setItem('user', JSON.stringify(user));
+          }
+        });
+      } else {
+        this.userState.next(null);
+        localStorage.removeItem('user');
+      }
+    });
   }
 
-  public register(userData: any): Observable<User> {
-    return this.http.post<User>(`${this.baseUrl}/register`, userData);
+  public register(registrationData: RegistrationData): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/register`, registrationData);
   }
 
-  public login(email: string, password: string): Observable<User> {
-    console.log('Login method called');
-    const credentials = { email, password };
-    return this.http.post<User>(`${this.baseUrl}/login`, credentials).pipe(
-      tap((user) => {
-        console.log('User logged in:', user);
-        this.userState.next(user);
-        localStorage.setItem('user', JSON.stringify(user));
-      })
-    );
+  public login(email: string, password: string): Observable<any> {
+    const url = `https://${environment.auth0.domain}/oauth/token`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    const body = {
+      grant_type: 'password',
+      username: email,
+      password: password,
+      scope: 'openid profile email', // adjust the scope as needed
+      client_id: environment.auth0.clientId,
+    };
+
+    return this.http.post(url, body, { headers });
   }
 
   public logout(): void {
-    console.log('User logged out');
+    this.auth.logout();
     this.userState.next(null);
     localStorage.removeItem('user');
   }
@@ -48,7 +75,6 @@ export class UserService {
   }
 
   public updateUserState(user: User | null): void {
-    console.log('Updating user state:', user);
     this.userState.next(user);
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
@@ -59,11 +85,7 @@ export class UserService {
 
   public initializeUserState(): void {
     const userState = JSON.parse(localStorage.getItem('user'));
-    const now = new Date();
-
-    if (userState && now.getTime() > userState.expiry) {
-      localStorage.removeItem('user');
-    } else if (userState) {
+    if (userState) {
       this.userState.next(userState);
     }
   }

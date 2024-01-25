@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { RegistrationData } from 'src/app/models/registration-data';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
   registrationForm: FormGroup;
-  userData: any;
+  userData: RegistrationData;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,7 +42,8 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.userService.register(this.registrationForm.value).subscribe(
+    this.userData = this.registrationForm.value as RegistrationData;
+    this.userService.register(this.userData).subscribe(
       (res) => {
         alert('Registration Successful');
         this.registrationForm.reset;

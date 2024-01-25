@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Category } from 'src/app/models/category';
 import { CategoryService } from 'src/app/shared/services/category.service';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-categories',
@@ -14,10 +15,18 @@ export class CategoriesComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ) {}
 
   ngOnInit(): void {
+    // this.auth.isAuthenticated$.subscribe((isLoggedIn) => {
+    //   if (isLoggedIn) {
+    //   } else {
+    //     this.router.navigate(['/login']);
+    //   }
+    // });
+
     this.categoryService.getCategories().subscribe(
       (categories) => {
         this.categories = categories;

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from './shared/services/user.service';
-
+import { AuthService } from '@auth0/auth0-angular';
 // import { PRODUCTS } from 'src/db-data';
 // import { Product } from './common/product';
 
@@ -10,8 +9,6 @@ import { UserService } from './shared/services/user.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  constructor(private userService: UserService) {}
-  ngOnInit() {
-    this.userService.initializeUserState();
-  }
+  constructor(public auth: AuthService) {}
+  ngOnInit() {}
 }

@@ -8,11 +8,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    private final UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User registerUser(User user){
-        return userRepository.save(user);
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser != null) {
+            existingUser.setAuth0Id(user.getAuth0Id());
+            return userRepository.save(existingUser);
+        } else {
+            return userRepository.save(user);
+        }
     }
 
     public User findUserByEmail(String email){
@@ -20,7 +30,7 @@ public class UserService {
     }
 
     public UserDTO convertToDTO(User user) {
-        return new UserDTO(user.getUserId(), user.getName(), user.getEmail());
+        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getAuth0Id());
     }
 
 }

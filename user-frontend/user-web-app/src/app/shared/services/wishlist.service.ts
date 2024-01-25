@@ -32,25 +32,25 @@ export class WishlistService {
     this.baseUrl = 'http://localhost:8080/wishlist';
   }
 
-  getWishlistItems(userId: number): Observable<Wishlist[]> {
+  getWishlistItems(userId: string): Observable<Wishlist[]> {
     if (!userId) return EMPTY;
     return this.http.get<Wishlist[]>(`${this.baseUrl}/${userId}`);
   }
 
-  addToWishlist(userId: number, productId: number): Observable<Wishlist> {
+  addToWishlist(userId: string, productId: number): Observable<Wishlist> {
     return this.http.post<Wishlist>(`${this.baseUrl}/add`, {
       userId,
       productId,
     });
   }
 
-  removeFromWishlist(userId: number, productId: number): Observable<void> {
+  removeFromWishlist(userId: string, productId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/remove`, {
       params: { userId, productId },
     });
   }
 
-  isItemInWishlist(userId: number, productId: number): Observable<boolean> {
+  isItemInWishlist(userId: string, productId: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}/check`, {
       params: { userId, productId },
     });
