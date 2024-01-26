@@ -29,6 +29,7 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { RouterModule } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LoginAuth0Component } from './auth/login-auth0/login-auth0.component';
+import { CallbackComponent } from './components/callback/callback.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { LoginAuth0Component } from './auth/login-auth0/login-auth0.component';
     PaymentComponent,
     WishlistComponent,
     LoginAuth0Component,
+    CallbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +62,9 @@ import { LoginAuth0Component } from './auth/login-auth0/login-auth0.component';
     AuthModule.forRoot({
       domain: environment.auth0.domain,
       clientId: environment.auth0.clientId,
+      authorizationParams: {
+        redirect_uri: window.location.origin,
+      },
     }),
   ],
   providers: [ProductsService, UserService, OrdersService],

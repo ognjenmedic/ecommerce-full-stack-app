@@ -10,10 +10,14 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductsComponent } from './components/products/products.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { LoginAuth0Component } from './auth/login-auth0/login-auth0.component';
+import { CallbackComponent } from './components/callback/callback.component';
 
 const routes: Routes = [
+  { path: 'callback', component: CallbackComponent },
   { path: 'wishlist', component: WishlistComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login-auth0', component: LoginAuth0Component },
   { path: 'payment', component: PaymentComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'products/:productId', component: ProductDetailsComponent },
@@ -26,7 +30,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
+  imports: [
+    RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload',
+      enableTracing: true,
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
