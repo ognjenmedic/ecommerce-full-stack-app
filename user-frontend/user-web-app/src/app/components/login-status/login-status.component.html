@@ -1,23 +1,25 @@
 <div class="login-status-navbar">
-  <span
-    class="text-base text-right"
-    *ngIf="userService.currentUser | async as user"
-  >
-    Welcome back {{ user.name }}!
-  </span>
+  <!-- Display user name if authenticated -->
+  <ng-container *ngIf="auth.isAuthenticated$ | async">
+    <span *ngIf="auth.user$ | async as user" class="text-base text-right">
+      Welcome back {{ user.name }}!
+    </span>
 
+    <!-- Logout Button -->
+    <button
+      (click)="logout()"
+      class="mx-2 my-2 bg-white transition duration-150 ease-in-out hover:border-gray-900 hover:text-gray-900 rounded border border-gray-800 text-gray-800 px-8 py-2 text-sm"
+    >
+      Logout
+    </button>
+  </ng-container>
+
+  <!-- Login Button, shown if not authenticated -->
   <button
-    *ngIf="!userService.isAuthenticated"
+    *ngIf="!(auth.isAuthenticated$ | async)"
+    (click)="login()"
     class="mx-2 my-2 bg-white transition duration-150 ease-in-out hover:border-gray-900 hover:text-gray-900 rounded border border-gray-800 text-gray-800 px-8 py-2 text-sm font-bold hover:shadow-lg"
-    routerLink="/login"
   >
     Login
-  </button>
-  <button
-    *ngIf="userService.isAuthenticated"
-    (click)="userService.logout()"
-    class="mx-2 my-2 bg-white transition duration-150 ease-in-out hover:border-gray-900 hover:text-gray-900 rounded border border-gray-800 text-gray-800 px-8 py-2 text-sm"
-  >
-    Logout
   </button>
 </div>

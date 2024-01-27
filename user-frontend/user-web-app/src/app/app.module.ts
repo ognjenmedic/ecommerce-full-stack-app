@@ -26,6 +26,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { RouterModule } from '@angular/router';
+import { AuthModule } from '@auth0/auth0-angular';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,13 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    AuthModule.forRoot({
+      domain: 'dev-6hrw2jmffjkxk80w.us.auth0.com',
+      clientId: 'zEiBX4VIeE958Mybk7KwnjSd1qdgdr60',
+      authorizationParams: {
+        redirect_uri: window.location.origin,
+      },
+    }),
   ],
   providers: [ProductsService, UserService, OrdersService],
   bootstrap: [AppComponent],
