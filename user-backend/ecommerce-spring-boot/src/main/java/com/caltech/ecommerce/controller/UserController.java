@@ -4,9 +4,12 @@ import com.caltech.ecommerce.dto.UserDTO;
 import com.caltech.ecommerce.entity.User;
 import com.caltech.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("users")
@@ -15,21 +18,23 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user){
-        User registeredUser = userService.registerUser(user);
-        return new ResponseEntity<>(registeredUser,HttpStatus.CREATED);
-
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal Jwt jwt) {
+        String auth0Id = jwt.getSubject();
+        String name = jwt.getClaimAsString("https://myecommerceapp.com/name"); // Adjust the claim name as needed
+        String email = jwt.getClaimAsString("https://myecommerceapp.com/email");
+        User user = userService.findOrCreateUser(auth0Id, name, email);
+        UserDTO userDTO = userService.convertToDTO(user);
+        return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> loginUser(@RequestBody User user){
-        User existingUser = userService.findUserByEmail(user.getEmail());
-        if(existingUser != null && existingUser.getPassword().equals(user.getPassword())){
-            UserDTO userDTO = userService.convertToDTO(existingUser);
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        }
+
+    @GetMapping("/findOrCreate")
+    public ResponseEntity<UserDTO> findOrCreateUser(@RequestParam String auth0Id, @RequestParam String name, @RequestParam String email) {
+        User user = userService.findOrCreateUser(auth0Id, name, email);
+        UserDTO userDTO = userService.convertToDTO(user);
+        return ResponseEntity.ok(userDTO);
     }
+
+
 }

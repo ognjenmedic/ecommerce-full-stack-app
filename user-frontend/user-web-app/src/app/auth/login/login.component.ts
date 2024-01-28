@@ -42,26 +42,26 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  login() {
-    const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
-    this.userService.login(email, password).subscribe(
-      (user) => {
-        if (user) {
-          this.loginForm.reset();
-          const now = new Date();
+  // login() {
+  //   const email = this.loginForm.value.email;
+  //   const password = this.loginForm.value.password;
+  //   this.userService.login(email, password).subscribe(
+  //     (user) => {
+  //       if (user) {
+  //         this.loginForm.reset();
+  //         const now = new Date();
 
-          (user.expiry = now.getTime() + 900000),
-            localStorage.setItem('user', JSON.stringify(user));
-          console.log(user);
-          this.router.navigate(['']);
-        } else {
-          alert('user not found');
-        }
-      },
-      (err) => {
-        alert('Something went wrong');
-      }
-    );
-  }
+  //         (user.expiry = now.getTime() + 900000),
+  //           localStorage.setItem('user', JSON.stringify(user));
+  //         console.log(user);
+  //         this.router.navigate(['']);
+  //       } else {
+  //         alert('user not found');
+  //       }
+  //     },
+  //     (err) => {
+  //       alert('Something went wrong');
+  //     }
+  //   );
+  // }
 }

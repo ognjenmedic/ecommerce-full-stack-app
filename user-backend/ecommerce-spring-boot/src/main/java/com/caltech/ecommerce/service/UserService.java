@@ -6,21 +6,33 @@ import com.caltech.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public User registerUser(User user){
-        return userRepository.save(user);
+    public User findOrCreateUser(String auth0id, String name, String email) {
+        return userRepository.findByAuth0id(auth0id)
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setAuth0id(auth0id);
+                    newUser.setName(name); // Assuming these setters exist
+                    newUser.setEmail(email);
+                    // set other default properties
+                    return userRepository.save(newUser);
+                });
     }
 
-    public User findUserByEmail(String email){
-        return userRepository.findByEmail(email);
+
+
+    public Optional<User> findUserByAuth0Id(String auth0id){
+        return userRepository.findByAuth0id(auth0id);
     }
 
     public UserDTO convertToDTO(User user) {
-        return new UserDTO(user.getUserId(), user.getName(), user.getEmail());
+        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getAuth0id());
     }
 
 }

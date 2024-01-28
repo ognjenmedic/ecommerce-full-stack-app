@@ -16,8 +16,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = false, unique = true)
+    private String auth0id;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Wishlist> wishlists;
@@ -29,11 +29,11 @@ public class User {
     public User() {
     }
 
-    public User(Long userId, String name, String email, String password) {
+    public User(Long userId, String name, String email, String auth0id) {
         this.userId = userId;
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.auth0id = auth0id;
     }
 
     // Getters and Setters
@@ -61,12 +61,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAuth0id() {
+        return auth0id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAuth0id(String auth0id) {
+        this.auth0id = auth0id;
     }
 
     public Set<Wishlist> getWishlists() {
@@ -91,9 +91,10 @@ public class User {
                 "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", auth0id='" + auth0id + '\'' +
                 ", cart='" + cart + '\'' +
-
                 '}';
     }
+
 
 }

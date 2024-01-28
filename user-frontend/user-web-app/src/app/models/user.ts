@@ -2,9 +2,8 @@ import { Wishlist } from './wishlist';
 
 export interface User {
   userId: number;
+  auth0id: string;
   name: string;
   email: string;
-  password: string;
   wishlists: Wishlist[];
-  expiry?: number;
 }

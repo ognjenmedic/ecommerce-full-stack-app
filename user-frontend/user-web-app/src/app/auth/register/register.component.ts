@@ -40,16 +40,16 @@ export class RegisterComponent implements OnInit {
     this.registrationForm.valueChanges.subscribe((x) => {});
   }
 
-  register() {
-    this.userService.register(this.registrationForm.value).subscribe(
-      (res) => {
-        alert('Registration Successful');
-        this.registrationForm.reset;
-        this.router.navigate(['/']);
-      },
-      (error) => {
-        alert('Something went wrong');
-      }
-    );
-  }
+  // register() {
+  //   this.userService.register(this.registrationForm.value).subscribe(
+  //     (res) => {
+  //       alert('Registration Successful');
+  //       this.registrationForm.reset;
+  //       this.router.navigate(['/']);
+  //     },
+  //     (error) => {
+  //       alert('Something went wrong');
+  //     }
+  //   );
+  // }
 }

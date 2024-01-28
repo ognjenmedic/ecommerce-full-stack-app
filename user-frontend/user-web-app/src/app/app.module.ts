@@ -27,6 +27,15 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { RouterModule } from '@angular/router';
 import { AuthModule } from '@auth0/auth0-angular';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
+const authConfig = {
+  domain: 'dev-6hrw2jmffjkxk80w.us.auth0.com',
+  clientId: 'zEiBX4VIeE958Mybk7KwnjSd1qdgdr60',
+  redirectUri: window.location.origin,
+  audience: 'https://ecommerce-api/', // Your API's audience
+};
 
 @NgModule({
   declarations: [
@@ -55,14 +64,20 @@ import { AuthModule } from '@auth0/auth0-angular';
     ReactiveFormsModule,
     FormsModule,
     AuthModule.forRoot({
-      domain: 'dev-6hrw2jmffjkxk80w.us.auth0.com',
-      clientId: 'zEiBX4VIeE958Mybk7KwnjSd1qdgdr60',
+      domain: authConfig.domain,
+      clientId: authConfig.clientId,
       authorizationParams: {
-        redirect_uri: window.location.origin,
+        redirect_uri: authConfig.redirectUri,
+        audience: authConfig.audience,
       },
     }),
   ],
-  providers: [ProductsService, UserService, OrdersService],
+  providers: [
+    ProductsService,
+    UserService,
+    OrdersService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
