@@ -8,11 +8,18 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
+  public isAuthenticated$: Observable<boolean>;
+
   constructor(
     @Inject(DOCUMENT) private doc: Document,
     public auth0: Auth0Service
-  ) {}
+  ) {
+    this.isAuthenticated$ = this.auth0.isAuthenticated$;
+  }
 
+  isAuthenticated(): Observable<boolean> {
+    return this.auth0.isAuthenticated$;
+  }
   login(): void {
     this.auth0.loginWithRedirect();
   }

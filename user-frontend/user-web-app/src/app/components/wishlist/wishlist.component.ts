@@ -7,6 +7,7 @@ import { CartItem } from 'src/app/models/cart-item';
 import { Wishlist } from 'src/app/models/wishlist';
 import { User } from 'src/app/models/user';
 import * as feather from 'feather-icons';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -33,6 +34,7 @@ export class WishlistComponent implements OnInit {
     private wishlistService: WishlistService,
     private cartService: CartService,
     private userService: UserService,
+    private authService: AuthService,
     private productService: ProductsService
   ) {
     this.emptyWishlistMessage = this.wishlistService.emptyWishlistMessage;
@@ -76,36 +78,38 @@ export class WishlistComponent implements OnInit {
   }
 
   addToCart(wishlistItem: Wishlist): void {
-    if (this.userService.isAuthenticated) {
-      this.userService.currentUser.subscribe((user) => {
-        if (user && user.userId) {
-          const product = wishlistItem.productDetails;
-          const userId = user.userId;
-          const productId = product.productId;
-          const quantity = 1;
+    this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+      if (isAuthenticated) {
+        this.userService.currentUser.subscribe((user) => {
+          if (user && user.userId) {
+            const product = wishlistItem.productDetails;
+            const userId = user.userId;
+            const productId = product.productId;
+            const quantity = 1;
 
-          this.cartService
-            .addToCart(userId, productId, quantity)
-            .subscribe(() => {
-              console.log('Product added to cart');
-            });
+            this.cartService
+              .addToCart(userId, productId, quantity)
+              .subscribe(() => {
+                console.log('Product added to cart');
+              });
 
-          this.removeWishlistItem(wishlistItem.productId, true);
+            this.removeWishlistItem(wishlistItem.productId, true);
 
-          this.showAddedToCartMessage = true;
-          setTimeout(() => {
-            this.showAddedToCartMessage = false;
-            if (this.wishlistItems.length === 0) {
-              this.showEmptyWishlistMessage = true;
-              this.showShopNowButton = true;
-              this.message = this.wishlistService.emptyWishlistMessage;
-            }
-          }, 2000);
-        }
-      });
-    } else {
-      this.showLoginFirst();
-    }
+            this.showAddedToCartMessage = true;
+            setTimeout(() => {
+              this.showAddedToCartMessage = false;
+              if (this.wishlistItems.length === 0) {
+                this.showEmptyWishlistMessage = true;
+                this.showShopNowButton = true;
+                this.message = this.wishlistService.emptyWishlistMessage;
+              }
+            }, 2000);
+          }
+        });
+      } else {
+        this.showLoginFirst();
+      }
+    });
   }
 
   removeWishlistItem(productId: number, isAddingToCart: boolean = false): void {

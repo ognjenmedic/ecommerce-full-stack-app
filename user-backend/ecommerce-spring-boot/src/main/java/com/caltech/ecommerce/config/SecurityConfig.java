@@ -33,8 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight OPTIONS requests
                 .antMatchers("/public/**", "/categories", "/products/**").permitAll() // Permit unauthenticated access to categories and products
-                // Add any other endpoints that should be publicly accessible
-                .anyRequest().authenticated()
+                .antMatchers("/wishlist/**", "/cart/**").authenticated() // Require authentication                .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer()
                 .jwt(); // Configure JWT-based authentication

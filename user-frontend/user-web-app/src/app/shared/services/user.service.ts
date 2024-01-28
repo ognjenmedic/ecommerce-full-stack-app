@@ -23,9 +23,9 @@ export class UserService {
     });
   }
 
-  public get isAuthenticated(): Observable<boolean> {
-    return this.auth0.isAuthenticated$;
-  }
+  // public get isAuthenticated(): Observable<boolean> {
+  //   return this.auth0.isAuthenticated$;
+  // }
 
   public get currentUser(): Observable<User | null> {
     return this.userState.asObservable();

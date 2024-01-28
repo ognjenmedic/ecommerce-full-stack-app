@@ -36,11 +36,7 @@
         </button>
 
         <button
-          (click)="
-            userService.isAuthenticated
-              ? addItemToWishlist(product)
-              : showLoginFirst()
-          "
+          (click)="handleWishlistClick(product)"
           class="mx-2 my-2 bg-gray-900 hover:bg-gray-700 rounded border border-gray-800 text-slate-50 px-3 py-2 text-xs"
         >
           Wishlist

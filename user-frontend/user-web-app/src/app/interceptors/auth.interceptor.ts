@@ -5,7 +5,16 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  take,
+  throwError,
+} from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
 
 @Injectable()
@@ -16,12 +25,29 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const authToken = this.authService.getToken();
-
-    const authReq = request.clone({
-      headers: request.headers.set('Authorization', 'Bearer ' + authToken),
-    });
-
-    return next.handle(request);
+    return this.authService.isAuthenticated$.pipe(
+      take(1),
+      mergeMap((isAuthenticated) => {
+        if (isAuthenticated) {
+          return this.authService.getToken().pipe(
+            take(1),
+            map((token) => {
+              if (token) {
+                request = request.clone({
+                  headers: request.headers.set(
+                    'Authorization',
+                    `Bearer ${token}`
+                  ),
+                });
+              }
+              return request;
+            })
+          );
+        } else {
+          return of(request);
+        }
+      }),
+      mergeMap((request) => next.handle(request))
+    );
   }
 }

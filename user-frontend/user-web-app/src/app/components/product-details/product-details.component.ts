@@ -7,6 +7,7 @@ import { CartService } from 'src/app/shared/services/cart.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { WishlistService } from 'src/app/shared/services/wishlist.service';
 import { Wishlist } from 'src/app/models/wishlist';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-product-details',
@@ -33,7 +34,8 @@ export class ProductDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private cartService: CartService,
     private userService: UserService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    public authService: AuthService
   ) {
     this.showLoginFirstMessage = false;
   }
@@ -58,27 +60,29 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart(product: Product) {
-    if (this.userService.isAuthenticated) {
-      this.userService.currentUser.subscribe((user) => {
-        if (user && user.userId) {
-          console.log(
-            `Adding to cart: ${product.productName}, ${product.unitPrice}`
-          );
+    this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+      if (isAuthenticated) {
+        this.userService.currentUser.subscribe((user) => {
+          if (user && user.userId) {
+            console.log(
+              `Adding to cart: ${product.productName}, ${product.unitPrice}`
+            );
 
-          const userId = user.userId;
-          const productId = product.productId;
-          const quantity = this.num;
+            const userId = user.userId;
+            const productId = product.productId;
+            const quantity = this.num;
 
-          this.cartService
-            .addToCart(userId, productId, quantity)
-            .subscribe(() => {
-              console.log(product);
-            });
-        }
-      });
-    } else {
-      this.showLoginFirst();
-    }
+            this.cartService
+              .addToCart(userId, productId, quantity)
+              .subscribe(() => {
+                console.log(product);
+              });
+          }
+        });
+      } else {
+        this.showLoginFirst();
+      }
+    });
   }
 
   addItemToWishlist(product: Product) {
