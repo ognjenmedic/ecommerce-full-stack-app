@@ -20,9 +20,7 @@ import { LoginStatusComponent } from './components/login-status/login-status.com
 
 import { ProductsService } from './shared/services/products.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './auth/login/login.component';
 import { UserService } from './shared/services/user.service';
-import { RegisterComponent } from './auth/register/register.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { RouterModule } from '@angular/router';
@@ -52,8 +50,6 @@ const authConfig = {
     CartStatusComponent,
     CartDetailsComponent,
     LoginStatusComponent,
-    LoginComponent,
-    RegisterComponent,
     PaymentComponent,
     WishlistComponent,
   ],

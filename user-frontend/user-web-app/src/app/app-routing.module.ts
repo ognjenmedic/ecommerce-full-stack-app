@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { CartDetailsComponent } from './components/cart-details/cart-details.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
@@ -13,9 +11,7 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 const routes: Routes = [
   { path: 'wishlist', component: WishlistComponent },
-  { path: 'login', component: LoginComponent },
   { path: 'payment', component: PaymentComponent },
-  { path: 'register', component: RegisterComponent },
   { path: 'products/:productId', component: ProductDetailsComponent },
   { path: 'cart-details', component: CartDetailsComponent },
   { path: 'checkout', component: CheckoutComponent },
