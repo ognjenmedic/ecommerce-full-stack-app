@@ -17,7 +17,10 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class ProductDetailsComponent implements OnInit {
   product: Product;
   showLoginFirstMessage: boolean;
-
+  showAddedMessage: boolean;
+  showExistingMessage: boolean;
+  showAddedToCartMessage: boolean;
+  addedToCartMessage: string;
   num: number = 1;
 
   cal = (id: string) => {
@@ -32,12 +35,17 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private productsService: ProductsService,
     private route: ActivatedRoute,
-    private cartService: CartService,
+    public cartService: CartService,
     private userService: UserService,
-    private wishlistService: WishlistService,
+    public wishlistService: WishlistService,
     public authService: AuthService
   ) {
     this.showLoginFirstMessage = false;
+    this.showAddedMessage = false;
+    this.showExistingMessage = false;
+    this.showLoginFirstMessage = false;
+    this.showAddedToCartMessage = false;
+    this.addedToCartMessage = this.cartService.addedToCartMessage;
   }
 
   ngOnInit(): void {
@@ -70,11 +78,15 @@ export class ProductDetailsComponent implements OnInit {
 
             const userId = user.userId;
             const productId = product.productId;
-            const quantity = this.num;
+            const quantity = 1;
 
             this.cartService
               .addToCart(userId, productId, quantity)
               .subscribe(() => {
+                this.showAddedToCartMessage = true;
+                setTimeout(() => {
+                  this.showAddedToCartMessage = false;
+                }, 2000);
                 console.log(product);
               });
           }
@@ -86,21 +98,38 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addItemToWishlist(product: Product) {
-    this.userService.currentUser.subscribe((user) => {
-      if (user) {
-        this.wishlistService
-          .isItemInWishlist(user.userId, product.productId)
-          .subscribe((isInWishlist) => {
-            if (isInWishlist) {
-              alert('Product already in Wish List!');
-            } else {
-              this.wishlistService
-                .addToWishlist(user.userId, product.productId)
-                .subscribe(() => {
-                  alert('Product added to Wish List!');
-                });
-            }
-          });
+    this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+      if (isAuthenticated) {
+        this.userService.currentUser.subscribe((user) => {
+          if (user && user.userId) {
+            this.wishlistService
+              .getWishlistItems(user.userId)
+              .subscribe((wishlist) => {
+                let existingWishlistItem = wishlist.find(
+                  (item) => item.productId === product.productId
+                );
+                if (existingWishlistItem) {
+                  this.showExistingMessage = true;
+                  setTimeout(() => {
+                    this.showExistingMessage = false;
+                  }, 2000);
+                } else {
+                  const userId = user.userId;
+                  const productId = product.productId;
+                  this.wishlistService
+                    .addToWishlist(userId, productId)
+                    .subscribe((res) => {
+                      this.showAddedMessage = true;
+                      setTimeout(() => {
+                        this.showAddedMessage = false;
+                      }, 2000);
+                    });
+                }
+              });
+          }
+        });
+      } else {
+        this.showLoginFirst();
       }
     });
   }

@@ -72,6 +72,7 @@ export class WishlistComponent implements OnInit {
             this.message = this.showEmptyWishlistMessage
               ? this.wishlistService.emptyWishlistMessage
               : '';
+            this.showShopNowButton = true;
           });
       }
     });

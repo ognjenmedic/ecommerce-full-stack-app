@@ -8,18 +8,22 @@ import javax.persistence.*;
 @Table(name = "cart_item")
 public class CartItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartItemId;
+    @EmbeddedId
+    private CartItemId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
-    @JsonBackReference
-    private Cart cart;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("productId")
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
 
     @Column(nullable = false)
     private int quantity;
@@ -27,21 +31,22 @@ public class CartItem {
     public CartItem() {
     }
 
-    // Getters and Setters
-    public Long getCartItemId() {
-        return cartItemId;
-    }
-
-    public void setCartItemId(Long cartItemId) {
-        this.cartItemId = cartItemId;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
+    public CartItem(CartItemId id, Product product, User user, Cart cart, int quantity) {
+        this.id = id;
+        this.product = product;
+        this.user = user;
         this.cart = cart;
+        this.quantity = quantity;
+    }
+
+    // Getters and Setters
+
+    public CartItemId getId() {
+        return id;
+    }
+
+    public void setId(CartItemId id) {
+        this.id = id;
     }
 
     public Product getProduct() {
@@ -52,6 +57,14 @@ public class CartItem {
         this.product = product;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -60,11 +73,24 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     @Override
     public String toString() {
         return "CartItem{" +
-                "cartItemId=" + cartItemId +
+                "id=" + id +
+                ", product=" + (product != null ? product.getProductId() : "null") +
+                ", cart=" + (cart != null ? cart.getCartId() : "null") +
+                ", user=" + (user != null ? user.getUserId() : "null") +
                 ", quantity=" + quantity +
                 '}';
     }
+
+
 }

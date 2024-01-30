@@ -20,7 +20,7 @@ public class CartController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<CartDTO> getCartByUserId(@PathVariable Long userId) {
-        Cart cart = cartService.getCartByUserId(userId);
+        Cart cart = cartService.getCartWithProducts(userId);
         CartDTO cartDTO = cartService.convertToDTO(cart);
         return ResponseEntity.ok(cartDTO);    }
 
@@ -33,8 +33,9 @@ public class CartController {
         return ResponseEntity.ok(cartDTO);
     }
 
-    @PostMapping("/remove")
+    @DeleteMapping("/remove")
     public ResponseEntity<CartDTO> removeFromCart(@RequestParam Long userId, @RequestParam Long productId) {
+        System.out.println("removeFromCart called with userId = " + userId + " and productId = " + productId);
         Cart cart = cartService.removeFromCart(userId, productId);
         CartDTO cartDTO = cartService.convertToDTO(cart);
         return ResponseEntity.ok(cartDTO);

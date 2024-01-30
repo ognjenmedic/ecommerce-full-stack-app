@@ -14,9 +14,12 @@ import { WishlistService } from 'src/app/shared/services/wishlist.service';
 })
 export class CartDetailsComponent implements OnInit {
   cart: Cart;
+  cartItems: CartItem[];
   showMovedMessage: boolean;
   showExistingMessage: boolean;
   showRemovedMessage: boolean;
+  currentUserId: number | null;
+  movingToWishlist: boolean;
 
   constructor(
     private cartService: CartService,
@@ -24,80 +27,84 @@ export class CartDetailsComponent implements OnInit {
     private userService: UserService
   ) {
     this.cart = new Cart();
+    this.cartItems = [];
     this.showMovedMessage = false;
     this.showExistingMessage = false;
     this.showRemovedMessage = false;
+    this.movingToWishlist = false;
+    this.currentUserId = null;
   }
 
   ngOnInit(): void {
-    this.loadCartDetails();
-  }
-
-  loadCartDetails() {
     this.userService.currentUser.subscribe((user) => {
       if (user) {
-        this.cartService.getCart(user.userId).subscribe((cartData) => {
-          console.log(cartData);
-          this.cart = cartData;
-        });
+        console.log('User found in ngOnInit', user);
+        this.currentUserId = user.userId;
+        this.loadCartDetails();
+      } else {
+        console.log('No user found in ngOnInit');
+        this.currentUserId = null;
+        this.cart = new Cart();
       }
     });
   }
 
+  loadCartDetails() {
+    if (this.currentUserId) {
+      this.cartService.getCart(this.currentUserId).subscribe((cartData) => {
+        console.log('Complete Cart Data:', cartData);
+        this.cart = cartData;
+        this.cartItems = cartData.cartItems;
+        console.log('Cart Items:', this.cartItems);
+      });
+    }
+  }
+
   removeCartItem(productId: number) {
-    this.userService.currentUser.subscribe((user) => {
-      console.log('Current user object:', user);
-      console.log('User ID:', user?.userId);
-      console.log('Product ID to remove:', productId);
-      if (user && user.userId && productId != null) {
-        console.log(
-          `Removing product with ID ${productId} for user with ID ${user.userId}`
-        );
-        this.cartService
-          .removeCartItem(user.userId, productId)
-          .subscribe((cartData) => {
-            this.cart = cartData;
+    if (this.currentUserId && productId != null) {
+      this.cartService
+        .removeCartItem(this.currentUserId, productId)
+        .subscribe((cartData) => {
+          console.log(`Cart item removed. New cart data: `, cartData);
+          this.loadCartDetails();
+
+          if (!this.movingToWishlist) {
             this.showRemovedMessage = true;
             setTimeout(() => {
               this.showRemovedMessage = false;
             }, 2000);
-          });
-      } else {
-        console.error('User ID or Product ID is null');
-      }
-    });
+          }
+
+          this.movingToWishlist = false;
+        });
+    } else {
+      console.error('User ID or Product ID is null');
+    }
   }
 
-  addItemToWishlist(product: Product) {
-    this.userService.currentUser.subscribe((user) => {
-      if (user && user.userId) {
-        this.wishlistService
-          .isItemInWishlist(user.userId, product.productId)
-          .subscribe((isInWishlist) => {
-            if (isInWishlist) {
-              this.showExistingMessage = true;
-              setTimeout(() => {
-                this.showExistingMessage = false;
-              }, 2000);
-            } else {
-              let addedWishlistItem: Wishlist = {
-                userId: user.userId,
-                productId: product.productId,
-                productDetails: product,
-              };
-
-              this.wishlistService
-                .addToWishlist(user.userId, product.productId)
-                .subscribe(() => {
-                  this.showMovedMessage = true;
-                  setTimeout(() => {
-                    this.showMovedMessage = false;
-                  }, 2000);
-                  this.removeCartItem(product.productId);
-                });
-            }
-          });
-      }
-    });
+  addItemToWishlist(productId: number) {
+    if (this.currentUserId && productId != null) {
+      this.wishlistService
+        .isItemInWishlist(this.currentUserId, productId)
+        .subscribe((isInWishlist) => {
+          if (isInWishlist) {
+            this.showExistingMessage = true;
+            setTimeout(() => {
+              this.showExistingMessage = false;
+            }, 2000);
+          } else {
+            this.wishlistService
+              .addToWishlist(this.currentUserId, productId)
+              .subscribe(() => {
+                this.showMovedMessage = true;
+                setTimeout(() => {
+                  this.showMovedMessage = false;
+                }, 2000);
+                this.movingToWishlist = true;
+                this.removeCartItem(productId);
+              });
+          }
+        });
+    }
   }
 }

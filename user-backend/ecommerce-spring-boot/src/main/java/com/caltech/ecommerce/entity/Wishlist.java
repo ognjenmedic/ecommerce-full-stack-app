@@ -59,7 +59,7 @@ public class Wishlist {
     @Override
     public String toString() {
         return "Wishlist{" +
-                "id=" + id +  // id is the composite key of type WishlistId
+                "id=" + id +
                 ", product=" + (product != null ? product.getProductId() : "null") +
                 ", user=" + (user != null ? user.getUserId() : "null") +
                 '}';

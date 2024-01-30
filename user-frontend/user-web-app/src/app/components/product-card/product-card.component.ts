@@ -19,9 +19,11 @@ export class ProductCardComponent implements OnInit {
   showAddedMessage: boolean;
   showExistingMessage: boolean;
   showLoginFirstMessage: boolean;
+  showAddedToCartMessage: boolean;
+  addedToCartMessage: string;
 
   constructor(
-    private cartService: CartService,
+    public cartService: CartService,
     public wishlistService: WishlistService,
     public authService: AuthService,
     public userService: UserService
@@ -29,6 +31,8 @@ export class ProductCardComponent implements OnInit {
     this.showAddedMessage = false;
     this.showExistingMessage = false;
     this.showLoginFirstMessage = false;
+    this.showAddedToCartMessage = false;
+    this.addedToCartMessage = this.cartService.addedToCartMessage;
   }
 
   ngOnInit(): void {}
@@ -49,6 +53,10 @@ export class ProductCardComponent implements OnInit {
             this.cartService
               .addToCart(userId, productId, quantity)
               .subscribe(() => {
+                this.showAddedToCartMessage = true;
+                setTimeout(() => {
+                  this.showAddedToCartMessage = false;
+                }, 2000);
                 console.log(product);
               });
           }

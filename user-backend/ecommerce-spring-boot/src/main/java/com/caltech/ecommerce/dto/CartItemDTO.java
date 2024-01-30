@@ -1,18 +1,48 @@
 package com.caltech.ecommerce.dto;
 
+import java.math.BigDecimal;
+
+
 public class CartItemDTO {
-    private Long cartItemId;
     private Long productId;
     private int quantity;
-    private ProductDTO product;
+    private String productName;
+    private String imageUrl;
+    private String description;
+    private BigDecimal unitPrice;
 
-    public Long getCartItemId() {
-        return cartItemId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setCartItemId(Long cartItemId) {
-        this.cartItemId = cartItemId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
 
     public Long getProductId() {
         return productId;
@@ -30,11 +60,15 @@ public class CartItemDTO {
         this.quantity = quantity;
     }
 
-    public ProductDTO getProduct() {
-        return product;
+    public CartItemDTO() {
     }
 
-    public void setProduct(ProductDTO product) {
-        this.product = product;
+    public CartItemDTO(Long productId, int quantity, String productName, String imageUrl, String description, BigDecimal unitPrice) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.productName = productName;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.unitPrice = unitPrice;
     }
 }

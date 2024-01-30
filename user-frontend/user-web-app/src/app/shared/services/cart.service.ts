@@ -11,13 +11,14 @@ export class CartService {
   private currentCart$: BehaviorSubject<Cart> = new BehaviorSubject<Cart>(
     new Cart()
   );
-
+  addedToCartMessage: string;
   totalPrice$: Subject<number>;
   totalQuantity$: Subject<number>;
 
   constructor(private http: HttpClient) {
     this.totalPrice$ = new BehaviorSubject<number>(0);
     this.totalQuantity$ = new BehaviorSubject<number>(0);
+    this.addedToCartMessage = 'Product added to Cart';
   }
 
   getCart(userId: number): Observable<Cart> {
@@ -29,11 +30,17 @@ export class CartService {
     productId: number,
     quantity: number
   ): Observable<Cart> {
-    return this.http.post<Cart>(`${this.baseUrl}/cart/add`, {
-      userId,
-      productId,
-      quantity,
-    });
+    return this.http
+      .post<Cart>(`${this.baseUrl}/cart/add`, {
+        userId,
+        productId,
+        quantity,
+      })
+      .pipe(
+        tap((cart) => {
+          this.calculateTotals(cart);
+        })
+      );
   }
 
   getCurrentCart(): Observable<Cart> {
@@ -59,11 +66,28 @@ export class CartService {
       .set('productId', productId.toString());
 
     return this.http
-      .post<Cart>(`${this.baseUrl}/cart/remove`, null, { params })
+      .delete<Cart>(`${this.baseUrl}/cart/remove`, {
+        params,
+        responseType: 'json',
+      })
       .pipe(
         tap((cart) => {
           this.updateCurrentCart(cart);
+          this.calculateTotals(cart);
         })
       );
+  }
+
+  private calculateTotals(cart: Cart): void {
+    let totalPrice = 0;
+    let totalQuantity = 0;
+
+    for (let item of cart.cartItems) {
+      totalPrice += item.quantity * item.unitPrice;
+      totalQuantity += item.quantity;
+    }
+
+    this.totalPrice$.next(totalPrice);
+    this.totalQuantity$.next(totalQuantity);
   }
 }

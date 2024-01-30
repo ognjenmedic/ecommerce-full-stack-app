@@ -23,10 +23,6 @@ export class UserService {
     });
   }
 
-  // public get isAuthenticated(): Observable<boolean> {
-  //   return this.auth0.isAuthenticated$;
-  // }
-
   public get currentUser(): Observable<User | null> {
     return this.userState.asObservable();
   }
@@ -52,6 +48,7 @@ export class UserService {
               })
               .subscribe(
                 (userFromDb) => {
+                  console.log('User fetched from backend:', userFromDb);
                   this.userState.next(userFromDb);
                 },
                 (error) => {

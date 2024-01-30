@@ -2,7 +2,7 @@
   <!-- Display user name if authenticated -->
   <ng-container *ngIf="auth.isAuthenticated$ | async">
     <span *ngIf="auth.user$ | async as user" class="text-base text-right">
-      Welcome back {{ user.name }}!
+      Welcome back {{ userName }}!
     </span>
 
     <!-- Logout Button -->

@@ -3,15 +3,13 @@ package com.caltech.ecommerce.service;
 import com.caltech.ecommerce.dto.CartDTO;
 import com.caltech.ecommerce.dto.CartItemDTO;
 import com.caltech.ecommerce.dto.ProductDTO;
-import com.caltech.ecommerce.entity.Cart;
-import com.caltech.ecommerce.entity.CartItem;
-import com.caltech.ecommerce.entity.Product;
-import com.caltech.ecommerce.entity.User;
+import com.caltech.ecommerce.entity.*;
 import com.caltech.ecommerce.repository.CartRepository;
 import com.caltech.ecommerce.repository.ProductRepository;
 import com.caltech.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -62,15 +60,13 @@ public class CartService {
                         item.getProduct().getProductId().equals(productId))
                 .findFirst();
 
-
         if (existingCartItem.isPresent()) {
             CartItem cartItem = existingCartItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
-            CartItem newCartItem = new CartItem();
-            newCartItem.setCart(cart);
-            newCartItem.setProduct(product);
-            newCartItem.setQuantity(quantity);
+            CartItemId cartItemId = new CartItemId(userId, productId);
+            CartItem newCartItem = new CartItem(cartItemId, product, user, cart, quantity);
+
             cart.getCartItems().add(newCartItem);
         }
 
@@ -106,6 +102,9 @@ public class CartService {
     }
 
     public BigDecimal calculateCartTotal(Long cartId) {
+        if (cartId == null) {
+            return BigDecimal.ZERO;
+        }
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
@@ -127,20 +126,33 @@ public class CartService {
 
     private CartItemDTO convertToDTO(CartItem cartItem) {
         CartItemDTO cartItemDTO = new CartItemDTO();
-        cartItemDTO.setCartItemId(cartItem.getCartItemId());
         cartItemDTO.setProductId(cartItem.getProduct().getProductId());
         cartItemDTO.setQuantity(cartItem.getQuantity());
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setImageUrl(cartItem.getProduct().getImageUrl());
-        productDTO.setProductName(cartItem.getProduct().getProductName());
-        productDTO.setDescription(cartItem.getProduct().getDescription());
-        productDTO.setUnitPrice(cartItem.getProduct().getUnitPrice());
-
-        cartItemDTO.setProduct(productDTO);
+        Product product = cartItem.getProduct();
+        if (product != null) {
+            cartItemDTO.setProductName(product.getProductName());
+            cartItemDTO.setImageUrl(product.getImageUrl());
+            cartItemDTO.setDescription(product.getDescription());
+            cartItemDTO.setUnitPrice(product.getUnitPrice());
+        }
 
         return cartItemDTO;
     }
 
+
+    @Transactional
+    public Cart getCartWithProducts(Long userId) {
+        Cart cart = getCartByUserId(userId);
+        cart.getCartItems().forEach(item -> {
+            // Accessing product data to ensure it's loaded
+            Product product = item.getProduct();
+            System.out.println("Product: " + product);
+            if (product != null) {
+                product.getProductName(); // or any other product data
+            }
+        });
+        return cart;
+    }
 
 }

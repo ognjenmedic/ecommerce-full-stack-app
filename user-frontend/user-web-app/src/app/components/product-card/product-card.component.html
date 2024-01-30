@@ -18,7 +18,10 @@
     <div class="flex justify-evenly py-1 px-2 border-t border-gray-300">
       <ng-container
         *ngIf="
-          !showAddedMessage && !showExistingMessage && !showLoginFirstMessage;
+          !showAddedMessage &&
+            !showExistingMessage &&
+            !showLoginFirstMessage &&
+            !showAddedToCartMessage;
           else messageTemplate
         "
       >
@@ -71,6 +74,16 @@
           <p class="flex items-center justify-center">
             <span class="material-icons mr-2">warning</span>
             {{ wishlistService.loginFirstMessage }}
+          </p>
+        </div>
+        <div
+          *ngIf="showAddedToCartMessage"
+          class="border-black text-green-500 rounded-lg animate-fade-out display: block"
+          style="padding: 13px"
+        >
+          <p class="flex items-center justify-center">
+            <span class="material-icons mr-2">check_circle</span>
+            {{ cartService.addedToCartMessage }}
           </p>
         </div>
       </ng-template>
