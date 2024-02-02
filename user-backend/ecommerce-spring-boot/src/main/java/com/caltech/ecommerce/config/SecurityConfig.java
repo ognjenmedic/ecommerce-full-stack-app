@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+import javax.annotation.PostConstruct;
+
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -19,10 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
-        // Configure jwtDecoder if necessary
+        String jwkSetUri = issuerUri.endsWith("/") ? issuerUri + ".well-known/jwks.json" : issuerUri + "/.well-known/jwks.json";
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
         return jwtDecoder;
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

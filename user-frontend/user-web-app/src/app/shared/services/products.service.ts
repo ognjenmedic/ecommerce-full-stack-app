@@ -17,22 +17,24 @@ export class ProductsService {
   }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products/findAllProducts`);
+    return this.http.get<Product[]>(
+      `${this.baseUrl}/api/products/findAllProducts`
+    );
   }
 
   getProduct(productIdFromRoute: number): Observable<Product> {
-    const productUrl = `${this.baseUrl}/products/${productIdFromRoute}`;
+    const productUrl = `${this.baseUrl}/api/products/${productIdFromRoute}`;
     return this.http.get<Product>(productUrl);
   }
 
   getProductByCategoryId(categoryIdFromRoute: number): Observable<Product[]> {
-    const categoryUrl = `${this.baseUrl}/products/byCategory?categoryId=${categoryIdFromRoute}`;
+    const categoryUrl = `${this.baseUrl}/api/products/byCategory?categoryId=${categoryIdFromRoute}`;
     return this.http.get<Product[]>(categoryUrl);
   }
 
   searchProducts(searchTerm: string) {
     return this.http.get<Product[]>(
-      `${this.baseUrl}/products/search?query=${searchTerm}`
+      `${this.baseUrl}/api/products/search?query=${searchTerm}`
     );
   }
 }

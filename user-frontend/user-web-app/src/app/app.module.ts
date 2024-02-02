@@ -32,7 +32,7 @@ const authConfig = {
   domain: 'dev-6hrw2jmffjkxk80w.us.auth0.com',
   clientId: 'zEiBX4VIeE958Mybk7KwnjSd1qdgdr60',
   redirectUri: window.location.origin,
-  audience: 'https://ecommerce-api/', // Your API's audience
+  audience: 'https://ecommerce-api/',
 };
 
 @NgModule({
