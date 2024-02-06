@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, tap, throwError } from 'rxjs';
 import { Cart } from 'src/app/models/cart';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl: string;
   private currentCart$: BehaviorSubject<Cart> = new BehaviorSubject<Cart>(
     new Cart()
   );
@@ -19,10 +20,11 @@ export class CartService {
     this.totalPrice$ = new BehaviorSubject<number>(0);
     this.totalQuantity$ = new BehaviorSubject<number>(0);
     this.addedToCartMessage = 'Product added to Cart';
+    this.baseUrl = environment.apiBaseUrl;
   }
 
   getCart(userId: number): Observable<Cart> {
-    return this.http.get<Cart>(`${this.baseUrl}/cart/user/${userId}`);
+    return this.http.get<Cart>(`${this.baseUrl}/api/cart/user/${userId}`);
   }
 
   addToCart(
@@ -31,7 +33,7 @@ export class CartService {
     quantity: number
   ): Observable<Cart> {
     return this.http
-      .post<Cart>(`${this.baseUrl}/cart/add`, {
+      .post<Cart>(`${this.baseUrl}/api/cart/add`, {
         userId,
         productId,
         quantity,
@@ -66,7 +68,7 @@ export class CartService {
       .set('productId', productId.toString());
 
     return this.http
-      .delete<Cart>(`${this.baseUrl}/cart/remove`, {
+      .delete<Cart>(`${this.baseUrl}/api/cart/remove`, {
         params,
         responseType: 'json',
       })

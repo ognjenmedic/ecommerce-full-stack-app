@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { Wishlist } from 'src/app/models/wishlist';
 import { UserService } from './user.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -29,29 +30,29 @@ export class WishlistService {
     this.emptyWishlistMessage =
       'Your Wish List is empty... Check out our latest products now!';
     this.loginFirstMessage = 'Please Log In';
-    this.baseUrl = 'http://localhost:8080/wishlist';
+    this.baseUrl = environment.apiBaseUrl;
   }
 
   getWishlistItems(userId: number): Observable<Wishlist[]> {
     if (!userId) return EMPTY;
-    return this.http.get<Wishlist[]>(`${this.baseUrl}/${userId}`);
+    return this.http.get<Wishlist[]>(`${this.baseUrl}/api/wishlist/${userId}`);
   }
 
   addToWishlist(userId: number, productId: number): Observable<Wishlist> {
-    return this.http.post<Wishlist>(`${this.baseUrl}/add`, {
+    return this.http.post<Wishlist>(`${this.baseUrl}/api/wishlist/add`, {
       userId,
       productId,
     });
   }
 
   removeFromWishlist(userId: number, productId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/remove`, {
+    return this.http.delete<void>(`${this.baseUrl}/api/wishlist/remove`, {
       params: { userId, productId },
     });
   }
 
   isItemInWishlist(userId: number, productId: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}/check`, {
+    return this.http.get<boolean>(`${this.baseUrl}/api/wishlist/check`, {
       params: { userId, productId },
     });
   }

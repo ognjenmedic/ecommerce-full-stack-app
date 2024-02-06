@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("api/users")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal Jwt jwt) {
         String auth0Id = jwt.getSubject();
-        String name = jwt.getClaimAsString("https://myecommerceapp.com/name"); // Adjust the claim name as needed
+        String name = jwt.getClaimAsString("https://myecommerceapp.com/name");
         String email = jwt.getClaimAsString("https://myecommerceapp.com/email");
         User user = userService.findOrCreateUser(auth0Id, name, email);
         UserDTO userDTO = userService.convertToDTO(user);

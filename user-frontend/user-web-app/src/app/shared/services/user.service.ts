@@ -3,16 +3,18 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { AuthService as Auth0Service } from '@auth0/auth0-angular';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private userState: BehaviorSubject<User | null>;
-  private baseUrl: string = 'http://localhost:8080/users';
+  private baseUrl: string;
 
   constructor(private http: HttpClient, public auth0: Auth0Service) {
     this.userState = new BehaviorSubject<User | null>(null);
+    this.baseUrl = environment.apiBaseUrl;
 
     this.auth0.isAuthenticated$.subscribe((isAuthenticated) => {
       if (isAuthenticated) {
@@ -42,7 +44,7 @@ export class UserService {
               .set('email', tokenClaims['https://myecommerceapp.com/email']);
 
             this.http
-              .get<User>(`${this.baseUrl}/findOrCreate`, {
+              .get<User>(`${this.baseUrl}/api/users/findOrCreate`, {
                 headers: headers,
                 params: params,
               })

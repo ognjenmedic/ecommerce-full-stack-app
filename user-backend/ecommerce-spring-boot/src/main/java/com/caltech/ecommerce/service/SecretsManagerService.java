@@ -6,11 +6,13 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Map;
 
 @Service
+@Profile("prod")
 public class SecretsManagerService {
     private final Logger logger = LoggerFactory.getLogger(SecretsManagerService.class);
 

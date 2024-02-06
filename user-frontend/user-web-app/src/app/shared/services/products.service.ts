@@ -3,17 +3,19 @@ import { Injectable } from '@angular/core';
 import { map, Observable, ReplaySubject, Subject } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { Category } from 'src/app/models/category';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl: string;
   products: Subject<Product[]>;
   public selectedCategory$: ReplaySubject<Category>;
   constructor(private http: HttpClient) {
     this.selectedCategory$ = new ReplaySubject();
     this.products = new Subject();
+    this.baseUrl = environment.apiBaseUrl;
   }
 
   getProducts(): Observable<Product[]> {
