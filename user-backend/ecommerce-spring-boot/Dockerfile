@@ -8,8 +8,13 @@ RUN apt-get update \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
     && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
+# Copy the jar file
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 
-# Use Dockerize to wait for MySQL
-ENTRYPOINT ["dockerize", "-wait", "tcp://mysql-container:3306", "-timeout", "30s", "java", "-jar", "/app.jar"]
+# Copy the start script into the image and make it executable
+COPY start-app.sh start-app.sh
+RUN chmod +x start-app.sh
+
+# Set the script as the entrypoint
+ENTRYPOINT ["./start-app.sh"]
