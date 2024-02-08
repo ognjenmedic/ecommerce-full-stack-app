@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'M3'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,9 +12,9 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
+        stage('Maven Build') {
             steps {
-                script {
+                dir('user-backend/ecommerce-spring-boot') {
                     sh 'mvn clean package -Pprod'
                 }
             }
