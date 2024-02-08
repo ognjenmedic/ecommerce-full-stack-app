@@ -8,6 +8,14 @@ pipeline {
             }
         }
 
+        stage('Build with Maven') {
+            steps {
+                script {
+                    sh 'mvn clean package -Pprod'
+                }
+            }
+        }
+
         stage('Build & Deploy with Docker Compose') {
             steps {
                 script {
