@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("api/cart")
-@CrossOrigin(origins = "http://localhost:4200")
 public class CartController {
 
     @Autowired

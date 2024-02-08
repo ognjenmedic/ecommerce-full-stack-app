@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/wishlist")
-@CrossOrigin(origins = "http://localhost:4200")
 public class WishlistController {
 
     private final WishlistService wishlistService;

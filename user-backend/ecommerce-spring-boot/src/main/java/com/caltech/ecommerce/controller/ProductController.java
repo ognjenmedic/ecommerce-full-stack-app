@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/products")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
