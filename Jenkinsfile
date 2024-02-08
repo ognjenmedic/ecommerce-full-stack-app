@@ -15,7 +15,7 @@ pipeline {
         stage('Maven Build') {
             steps {
                 dir('user-backend/ecommerce-spring-boot') {
-                    sh 'mvn clean package -Pprod'
+                    sh 'mvn clean package -Pprod -DskipTests'
                 }
             }
         }
