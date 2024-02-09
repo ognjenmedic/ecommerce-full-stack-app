@@ -31,7 +31,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://www.sivique.com", "http://www.sivique.com")
+                        .allowedOrigins("https://www.sivique.com", "http://www.sivique.com", "https://sivique.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
